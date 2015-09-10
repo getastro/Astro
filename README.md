@@ -11,7 +11,6 @@ This framework to use to generate wordpress content by simple writing HTML tag a
     `data-api-single="page/3"`   3 is post ID
 
 ###Example:
--------
 ```
     <!-- defind the source url -->
     <body data-api-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
@@ -22,18 +21,16 @@ This framework to use to generate wordpress content by simple writing HTML tag a
     <!-- when fetch 1 post must provide the post id -->
     <!-- if not, you can define a search critria in the data-api-options-->
     <div data-api-single="page/4" data-api-options="search=schedule">
-    <script src="./main.js"></script>
+    <script src="./wp-api-element.js"></script>
     </body>
 
 ```
 
 ###Question:
----------
 -  what about accessibility
 -  what about SEO
 
 ###Support:
---------
 IE8+
 
 WordPress official API 
@@ -42,11 +39,9 @@ WordPress official API
 
 
 ###Todo:
------
 
-- Improve template string for the WordPress post and page
-
-Render more fields, ex, customize return fields(now only return title and content)
+- Improve template string for the WordPress post and page.
+ex, customize return fields(now only return title and content)
 
 - Implement get content from more than 1 source  (wordpress, joomla, etc)
 
