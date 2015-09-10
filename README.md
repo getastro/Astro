@@ -3,15 +3,14 @@ Astro
 
 This framework to use to generate wordpress content by simple writing HTML tag and 0 line of javasript
 
-Rules:
-------
+###Rules:
 - it must has contain `data-api-source` in body tab
 - a div must has `data-api-single` or `data-api-collection` attribute
 - `data-api-options` is optional `data-api-options="number=5&search=name"`
 -  examples for `data-api-single="page"` `data-api-single="page"`
     `data-api-single="page/3"`   3 is post ID
 
-Example:
+###Example:
 -------
 ```
     <!-- defind the source url -->
@@ -28,12 +27,12 @@ Example:
 
 ```
 
-Question:
+###Question:
 ---------
 -  what about accessibility
 -  what about SEO
 
-Support:
+###Support:
 --------
 IE8+
 
@@ -42,7 +41,7 @@ WordPress official API
 
 
 
-Todo:
+###Todo:
 -----
 
 - Improve template string for the WordPress post and page
@@ -51,15 +50,4 @@ Render more fields, ex, customize return fields(now only return title and conten
 
 - Implement get content from more than 1 source  (wordpress, joomla, etc)
 
-#get post
-$site/posts/3
-
-#get page
-$site/posts/4
-
-#get posts
-$site/posts/?queryParameters
-
-#get categories
-$site/categories/?queryParameters
 
