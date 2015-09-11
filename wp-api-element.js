@@ -115,37 +115,59 @@ var wp_api = {
 (function () {
 // execute the funtcions
     // 1. search the dom if data source exist
-    var apiNodes, allNodes, size, sourceUrl;
+    var dataNodes, allNodes, size, sourceUrl, parentNodes, apiNodes;
     allNodes = document.getElementsByTagName("*");
-    
+    parentNodes = [];
     size = allNodes.length;
 
     
-    apiNodes = [];
+    dataNodes = [];
     while (size--) {
         if (Object.keys(allNodes[size].dataset).length > 0) {
-            apiNodes.push(allNodes[size]);
+            dataNodes.push(allNodes[size]);
         }
     }
 
-    // find source url 
-    
-    size = apiNodes.length;
+    // find source url and the node before the parent
+
+    size = dataNodes.length;
+    console.log(dataNodes);
+
+
+    //{
+    //  parentNodes: [
+    //      {
+    //          parentNode: {node(with datasources}
+    //          childNodes: [
+    //              node(with api-single/api-collection/)
+    //          ]
+    //      }
+    //  ]
+    //
     var index = 0;
     while (size--) {        
-        if (apiNodes[size].hasAttribute("data-api-source")) {
-            sourceUrl = apiNodes[size].getAttribute("data-api-source");
-            // body tag do not need anymore
-            apiNodes.splice(size, 1);
+        if (dataNodes[size].hasAttribute("data-api-source")) {
+            parentNodes.push({parentNode: dataNodes[size], childrenNodes: []});
         }     
     }
 
-    apiNodes.forEach(function (node) {
-        getJson(node, function (data) {
-            node.innerHTML = renderDom(JSON.parse(data));
-        });
+    console.log(parentNodes);
+    
+    // pick up the nessecery elements from dom tree 
+    parentNodes.forEach(function (parentNode) {
+        size = parentNode.parentNode.children.length;
+        while(size--) {
+            console.log(parentNode.parentNode.children[size].dataset);
+            if (parentNode.parentNode.children[size].dataset.apiSingle ||
+                parentNode.parentNode.children[size].dataset.apiCollection) {
+                parentNode.childrenNodes.push(parentNode.parentNode.children[size]);
+            }
+        }
     });
-
+    
+   // then now classifly the dataset and buildOption and url
+   // then fillin the tmeplate, this may not need to tempalteEngine anymore
+   // because the template is defined by the user 
 
     function getJson (node, callback) {
         var queryOptions, requestURL;
@@ -158,39 +180,4 @@ var wp_api = {
         });
     }
     
-    function renderDom(data) {
-        var template;
-        if (data.posts) {
-            var longString = "";
-            template = "<h1><%this.title%></h1><p><%this.content%></p>";
-            data.posts.forEach(function (post) {
-                longString += wp_api.TemplateEngine(template, {
-                    //url :"/post.html?" + post.ID,
-                    title : post.title,
-                    content : post.content
-                });
-            });
-            return longString;
-        } else if (data.type === "page" || data.type ==="post") {
-            var longString = "";
-            template = "<h1><%this.title%></h1><p><%this.content%></p>";
-            longString = wp_api.TemplateEngine(template, {
-                title : data.title,
-                content : data.content
-            });
-            return longString;
-        }else if (data.categories) {
-            var longString = "";
-            longString+="<ul>";
-            data.categories.forEach(function (item) {
-                var template;
-                template = "<li><%this.name%></li>";
-                longString+= wp_api.TemplateEngine(template, {
-                    name: item.name
-                });
-            });
-            longString+= "</ul>";
-            return longString;
-        }
-    }
 }());
