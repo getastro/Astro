@@ -3,46 +3,73 @@ Astro
 
 This framework to use to generate wordpress content by simple writing HTML tag and 0 line of javasript
 
-###Rules:
-- it must has contain `data-api-source` in body tab
-- a div must has `data-api-single` or `data-api-collection` attribute
-- `data-api-options` is optional `data-api-options="number=5&search=name"`
--  examples for `data-api-single="page"` `data-api-single="page"`
-    `data-api-single="page/3"`   3 is post ID
-
 ###Example:
-```
-    <!-- defind the source url -->
-    <body data-api-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
-    
-    <!-- defind the type and query parameters in data-api-options -->
-    <div data-api-collection="posts" data-api-options="number=2"></div>
-    
-    <!-- when fetch 1 post must provide the post id -->
-    <!-- if not, you can define a search critria in the data-api-options-->
-    <div data-api-single="page/4" data-api-options="search=schedule">
-    <script src="./wp-api-element.js"></script>
-    </body>
+```html
+<div data-api-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
+    <div data-api-single="post/10" >
 
+        <!-- start define template here -->
+
+        <div data-this-title></div>
+        <img data-this-feature-image></div>
+        <div data-this-content></div>
+    </div>
+</div>
 ```
 
-###Question:
--  what about accessibility
--  what about SEO
+What it will be looks like after the library excecuted
+
+```html
+
+<div data-api-resouce="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
+    <div data-api-single="post/10">
+
+        <!-- start define template here -->
+
+        <div data-this-title>json api advanture 2</div>
+        <img data-this-feature-image src="http://mywordpress.com/cat.png"></img>
+        <div data-this-content>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu nulla sollicitudin, gravida massa at, aliquet turpis. Quisque accumsan, massa ac egestas imperdiet, lorem dolor tempus velit, non pellentesque ex.
+            </p>
+        </div>
+    </div>
+</div>
+
+```
+### How to use it:
+1. Make a wrapper html tag and put `data-api-source` attribute
+2. make a div tag inside it that contains `data-api-single` attribute and give it value
+3. create a template inside the div tag and use `data-this-[Return parameter]`
+    [parameter list](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/%24post_ID/#apidoc-response)
+
+
+####Rules of data attribute
+| data attribute      | Require | Values                          | This will return the specific post |
+|---------------------|---------|---------------------------------|------------------------------------|
+| data-api-single     | Yes     | post/#id                        | This will return the specific post |
+|                     |         | page/#id                        | This will return the specific post |
+| data-api-options    | No      | search=#post name&number=#limit | This will search specific post     |
+| data-api-collection | Yes     | posts                           | Coming soon                        |
+|                     |         | categories                      | Coming soon                        |
+
 
 ###Support:
-IE8+
 
-WordPress official API 
+blog in wordpress.com
+
+WordPress official Restful api endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
 
 
 
 ###Todo:
 
-- Improve template string for the WordPress post and page.
-ex, customize return fields(now only return title and content)
+- Implement get content from more than 1 source (standalone wordpress site using wp-api, json-api plugin)
 
-- Implement get content from more than 1 source  (wordpress, joomla, etc)
+###Issues:
+
+- Accessibility
+- SEO
+
 
 
