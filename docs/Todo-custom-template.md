@@ -6,7 +6,7 @@ User can define the dom element template for the json date render
 
 ```html
 
-<div data-api-single="page/4" data-api-options="search=schedule">
+<div data-api-single="page/4" >
 
     <!-- start define template here -->
 
@@ -15,13 +15,12 @@ User can define the dom element template for the json date render
     <div data-this-content></div>
 
 </div>
-
 ```
 
 What it will be looks like after the library ran
 
 ```html
-<div data-api-single="page/4" data-api-options="search=schedule">
+<div data-api-single="page/4">
 
     <!-- start define template here -->
 
