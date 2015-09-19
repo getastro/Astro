@@ -1,3 +1,14 @@
+var Element = function (domBlock) {
+    // should expect element is the parent dom wrap with childnodes
+    var rawDom = domBlock;
+     
+    return {
+        getSourceUrl: function () {
+            rawDom = domBlock.querySelector("div");
+        }
+    }
+}
+
 var wp_api = {
     //var buildURL, buildOptions, ajax, TemplateEngine, getQueryString;
 
