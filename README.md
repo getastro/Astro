@@ -11,7 +11,7 @@ This framework to use to generate wordpress content by simple writing HTML tag a
         <!-- start define template here -->
 
         <div data-this-title></div>
-        <img data-this-feature-image></div>
+        <img data-this-featured_image></div>
         <div data-this-content></div>
     </div>
 </div>
@@ -27,9 +27,11 @@ What it will be looks like after the library excecuted
         <!-- start define template here -->
 
         <div data-this-title>json api advanture 2</div>
-        <img data-this-feature-image src="http://mywordpress.com/cat.png"></img>
+        <img data-this-featured_image src="http://mywordpress.com/cat.png"></img>
         <div data-this-content>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer eu nulla sollicitudin, gravida massa at, aliquet turpis. Quisque accumsan, massa ac egestas imperdiet, lorem dolor tempus velit, non pellentesque ex.
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+                eu nulla sollicitudin, gravida massa at, aliquet turpis. Quisque 
+                accumsan, massa ac egestas imperdiet, lorem dolor tempus velit, non pellentesque ex.
             </p>
         </div>
     </div>
