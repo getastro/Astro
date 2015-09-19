@@ -63,7 +63,8 @@ WordPress official Restful api endpoint
 
 
 ###Todo:
-
+- Unit test
+- Implement render collections
 - Implement get content from more than 1 source (standalone wordpress site using wp-api, json-api plugin)
 
 ###Issues:
