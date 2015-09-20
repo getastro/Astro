@@ -1,23 +1,22 @@
 describe("Util class", function () {
-    var dom;
-    beforeAll(function () {
-        var wpElement='';
-            wpElement += '<div data-wp-element = "posts" data-wp-options="search=Json api advanture1">';
-            wpElement += '</div>';
-        
-        dom = document.createElement('div');
-        dom.innerHTML = wpElement;
-    });
-    
-    it("should able to get the wpelement", function () {
-        var el, utl, criteria;
+    var json, error;
 
-        el = dom.querySelector("[data-wp-element]");
-        utl = util(); 
-        criteria = utl.getSearchCriteria(el);
-        expect(criteria.type).toEqual("posts");
-        expect(criteria.itemId).toBeUndefined();
-        expect(criteria.options).toBe("search=Json api advanture1");
-    }); 
+    beforeAll(function (done) {
+        var url;
+        url = "https://public-api.wordpress.com/rest/v1.1/sites/98941271/posts/?search=json&number=1&fields=title,content";
+        util.ajax(url, function (err, data) {
+            //console.log(err);
+            error = err;
+            json = data;
+            console.log(json);
+            done();
+        }); 
+    });
+
+    it ("should return a json", function (done) {
+        expect(error).toBe(null);
+        expect(json).toBeDefined();
+        done();
+    });
 
 });

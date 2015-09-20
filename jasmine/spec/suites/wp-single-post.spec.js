@@ -18,7 +18,6 @@ describe("Test Root Element", function() {
         var root, e;
             root = dom.querySelectorAll("[data-wp-source]");
             e = RootElement(root[0]);
-            console.log(root[0]);
         expect(e.getSourceURL()).toBe("https://public-api.wordpress.com/rest/v1.1/sites/98941271/");
     });
 
@@ -63,7 +62,6 @@ describe("Test WPElement", function () {
             wpEls.push(WPElement(els[i])); 
         }
         expect(wpEls[0].requestUrl(rootEls.getSourceURL())).toContain("posts");
-        console.log(wpEls[0].requestUrl(rootEls.getSourceURL()));
     });
 });
 
@@ -93,7 +91,6 @@ describe("Test WPElement with wrong type", function () {
             wpEls.push(WPElement(els[i])); 
         }
         expect(wpEls[0].requestUrl(rootEls.getSourceURL())).toBe(null);
-        console.log(wpEls[0].requestUrl(rootEls.getSourceURL()));
     });
 });
 
@@ -114,7 +111,7 @@ describe("Test WPElement with options", function () {
         dom.innerHTML = singleElement;
          
     }); 
-    it ("should able to return null if the wp-element is not posts", function () {
+    it ("should able to return wp options in request url", function () {
         var root, els;
             root = dom.querySelectorAll("[data-wp-source]");
         els = root[0].querySelectorAll("[data-wp-element]");
@@ -124,6 +121,5 @@ describe("Test WPElement with options", function () {
             wpEls.push(WPElement(els[i])); 
         }
         expect(wpEls[0].requestUrl(rootEls.getSourceURL())).toContain("fields");
-        console.log(wpEls[0].requestUrl(rootEls.getSourceURL()));
     });
 });

@@ -36,7 +36,6 @@ function WPElement(domEl) {
         }
         criteria = {};
         data = element.dataset;
-        console.log(data);
         index = data.wpElement.indexOf("/");
 
         if (index !== -1) {
@@ -68,32 +67,80 @@ function WPElement(domEl) {
         requestUrl: function (sourceUrl) {
             var component = getSearchCriteria(element);
             if (component){
-            var url = '';
-            url += processUrl(sourceUrl);
-            if (component.itemId) { 
-                url += component.type + "/" + component.itemId + "/"; 
-                if (component.options) {
-                    url+= "?" + component.options;
+                var url = '';
+                url += processUrl(sourceUrl);
+                if (component.itemId) { 
+                    url += component.type + "/" + component.itemId + "/"; 
+                    if (component.options) {
+                        url+= "?" + component.options;
+                    }
+                } else {
+                    url += component.type + "/";
+                    if (component.options) {
+                        url+= "?" + component.options;
+                    }
                 }
-            } else {
-                url += component.type + "/";
-                if (component.options) {
-                    url+= "?" + component.options;
-                }
-            }
-
-            return url;
-
+                return url;
             } else {
                 return null;
             }
+        },
+        self: function () {
+            return element;
         }
     }
 }
-var util = (function () {
-    return {
-        test: function () {
-            return "test util";
+var util = {
+    ajax: function (url, callback) {
+        var xmlhttp;
+        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        } else {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
         }
-    } 
-});
+
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+                callback(null,JSON.parse(xmlhttp.responseText));
+            } 
+        }
+        xmlhttp.open("GET",url,true);
+        xmlhttp.send();
+    },
+    test: function (){
+        return 1;
+    },
+    insert: function (json, template) {
+        console.log(json);
+        console.log(template);
+        for (var i = 0; i < template.length; i++) {
+            console.log(template[i].tagName);
+            if (template[i].tagName === "IMG") {
+                template[i].setAttribute("src",json[template[i].dataset.wpTemplate]);
+            }
+            template[i].innerHTML = json[template[i].dataset.wpTemplate];            
+        }
+    }
+};
+
+(function () {
+    var parent, root, childrens, wpElements, baseUrl;
+    
+    parent = document.querySelector("[data-wp-source");
+    root = RootElement(parent);
+    childrens = root.getChildElements();
+    console.log(root.getChildElements());
+    wpElements = [];
+    for (var i = 0; i < childrens.length; i++) {
+        wpElements.push(WPElement(childrens[i]));
+    }
+    console.log(wpElements);
+
+    var baseUrl = root.getSourceURL();
+    wpElements.forEach(function(el) {
+        var template = el.self().querySelectorAll("[data-wp-template]");
+        util.ajax(el.requestUrl(baseUrl), function(err, data) {
+            util.insert(data, template);
+        });
+    });
+}());
