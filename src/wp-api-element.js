@@ -1,6 +1,17 @@
+// Astro Framework - Wordpress verison
+// Copyright 2015 Ting Yang and Hector Jarquin
+// Released under the MIT license
+// Last updated: Sept 20, 2015
+
+// Support:
+//  Wordpress.org, the official rest api endpoint
+//  Jetpack plugin enable that support official endpoint
+//
 'use strict';
+
+// @name: RootElement
+// @param: The dom element that contain data-api-source
 function RootElement(domBlock) {
-    // should expect element is the parent dom wrap with childnodes
     var root = domBlock;
 
     return {
@@ -18,9 +29,6 @@ function RootElement(domBlock) {
 
         count: function () {
             return root.querySelectorAll("[data-wp-element]").length;
-        },
-        test: function () {
-            return "test Root";
         }
     };
 }
