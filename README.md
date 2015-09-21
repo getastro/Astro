@@ -48,7 +48,7 @@ What it will be looks like after the library excecuted
 ####Rules of data attribute
 | data attribute      | Require | Values                          | Description                        |
 |---------------------|---------|---------------------------------|------------------------------------|
-| data-api-source     | Yes     | your wordpress url              |Read Detai                          |
+| data-api-source     | Yes     | your wordpress url              |Read Detail                          |
 | data-wp-element     | Yes     | posts/#id                       | This will return the specific post |
 | data-wp-options     | No      | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
 
@@ -67,9 +67,7 @@ What it will be looks like after the library excecuted
 ###Support:
 
 -  blog in wordpress.com
--  self hosted blog and enable jetpack plugin
-WordPress official Restful api endpoint
-[Documentaion](https://developer.wordpress.com/docs/api/)
+-  self hosted blog and enabled jetpack json-api plugin
 
 
 ###Todo:
@@ -81,6 +79,11 @@ WordPress official Restful api endpoint
 
 - Accessibilit
 - SEO
+
+###Reference:
+WordPress official Restful api endpoint
+[Documentaion](https://developer.wordpress.com/docs/api/)
+
 
 
 
