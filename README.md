@@ -11,7 +11,7 @@ This framework to use to generate wordpress content by simple writing HTML tag a
         <!-- start define template here -->
 
         <div data-wp-template="title"></div>
-        <img data-wp-template="feature_image"></div>
+        <img data-wp-template="featured_image"></div>
         <div data-wp-tempalte="content"></div>
     </div>
 </div>
