@@ -48,9 +48,9 @@ What it will be looks like after the library excecuted
 ####Rules of data attribute
 | data attribute      | Require | Values                          | Description                        |
 |---------------------|---------|---------------------------------|------------------------------------|
-| data-api-source     | Yes     | your wordpress url              | [1]      |
-|data-wp-element      | Yes     | posts/#id                       | This will return the specific post |
-| data-api-options    | No      | search=youNameIt&number=2 |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
+| data-api-source     | Yes     | your wordpress url              |Read Detai                          |
+| data-wp-element     | Yes     | posts/#id                       | This will return the specific post |
+| data-wp-options     | No      | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
 
 
 #####More detail
