@@ -41,7 +41,7 @@ What it will be looks like after the library excecuted
 ### How to use it:
 1. Make a wrapper html tag and put `data-api-source` attribute
 2. make a div tag inside it that contains `data-wp-element` attribute and give it value
-3. create a template inside the div tag and use `data-this-[Return parameter]`
+3. create a template inside the div tag and use `data-wp-template` and give it value
     [parameter list](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/%24post_ID/#apidoc-response)
 
 
@@ -51,7 +51,7 @@ What it will be looks like after the library excecuted
 | data-api-source     | Yes     | your wordpress url              |Read Detail                          |
 | data-wp-element     | Yes     | posts/#id                       | This will return the specific post |
 | data-wp-options     | No      | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
-
+| data-wp-tempalte    | Yes     | title/content/featured_image    | The return field you want to display|
 
 #####More detail
 ```html
