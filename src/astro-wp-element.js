@@ -12,8 +12,12 @@
 // @name: RootElement
 // @param: The dom element that contain data-api-source
 function RootElement(domBlock) {
+    var url, root;
     var root = domBlock;
-
+    url = data.dataset.wpSource;
+    function validateSource (url) {
+        return (url.search(/wordpress/) != -1);
+    } 
     return {
         getSourceURL: function () {
             // root should expect
@@ -115,17 +119,22 @@ var util = {
         xmlhttp.open("GET", url, true);
         xmlhttp.send();
     },
-    test: function (){
-        return 1;
-    },
-    insert: function (json, template) {
+    insertContent: function (json, template) {
         for (var i = 0; i < template.length; i++) {
             if (template[i].tagName === "IMG") {
                 template[i].setAttribute("src",json[template[i].dataset.wpTemplate]);
             }
             template[i].innerHTML = json[template[i].dataset.wpTemplate];
         }
+    },
+    insertError: function (json, template) {
+        // TODO:
+        // insert error message into the dom,
+        // it helps developer to know what went wrong
+        //
+        // <img data-wp-template><span>Astro-ERROR: Can not fetch image</span></img>
     }
+
 };
 
 (function () {
@@ -144,7 +153,7 @@ var util = {
     wpElements.forEach(function(el) {
         var template = el.self().querySelectorAll("[data-wp-template]");
         util.ajax(el.requestUrl(baseUrl), function(err, data) {
-            util.insert(data, template);
+            util.insertContent(data, template);
         });
     });
 }());
