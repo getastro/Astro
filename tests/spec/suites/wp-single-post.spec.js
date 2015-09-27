@@ -25,7 +25,7 @@ describe("Test Root Element", function() {
         var root, e;
             root = dom.querySelectorAll("[data-wp-source]");
         e = RootElement(root[0]);
-        expect(e.count()).toBe(1);
+        expect(e.countElements()).toBe(1);
     });
 });
 

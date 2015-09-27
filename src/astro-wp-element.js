@@ -14,7 +14,7 @@
 function RootElement(domBlock) {
     var url, root;
     var root = domBlock;
-    url = data.dataset.wpSource;
+    url = root.dataset.wpSource;
     function validateSource (url) {
         return (url.search(/wordpress/) != -1);
     } 
@@ -27,14 +27,77 @@ function RootElement(domBlock) {
                 return root.dataset.wpSource;
             }
         },
-        getChildElements: function () {
+        findWPElements: function () {
             return root.querySelectorAll("[data-wp-element]");
         },
+        findWPCollections: function () {
+            return root.querySelectorAll("[data-wp-collection]");
+        },
 
-        count: function () {
+        countElements: function () {
             return root.querySelectorAll("[data-wp-element]").length;
+        },
+
+        countCollections: function () {
+            return root.querySelectorAll("[data-wp-collection]").length;
         }
+
     };
+}
+
+function WPCollections (domEl) {
+    var element, expectedType;
+    expectedType = ["posts", "categories"];
+
+    element = domEl;
+
+    function getSearchCriteria(element) {
+        var criteria, data;
+        criteria = {};
+        if(!element) {
+            return;
+        }
+        // get the dataset
+        data = element.dataset;
+        if (data.wpCollection) {
+            criteria.type = data.wpCollection;
+        }
+        if (data.wpOptions) {
+            criteria.option = data.wpOptions;   
+        }
+        if (expectedType.indexOf(criteria.type) === -1) {
+            console.error("data-wp-element only support posts and category");
+            return null;
+        }
+        return criteria;
+    }
+
+
+    return {
+        requestUrl: function (sourceUrl) {
+            // build the request url
+            var component = getSearchCriteria(element);          
+            var url;
+            if (component.hasOwnProperty("type")) {
+                url = "";
+                url += sourceUrl + component.type + "/";
+                if (component.hasOwnProperty("option")) {
+                    url += "?" + component.option;
+                } else {
+                    // do not do anything when no option
+                }
+            } else {
+                // this may not happen if no type
+            }
+            return url;    
+        },
+        self: function () {
+            return element;
+        },
+        template: function () {
+            return element.querySelector("[data-wp-layout]");
+        }
+    }
 }
 
 function WPElement(domEl) {
@@ -124,8 +187,31 @@ var util = {
             if (template[i].tagName === "IMG") {
                 template[i].setAttribute("src",json[template[i].dataset.wpTemplate]);
             }
+            if (template[i].tagName === "A") {
+                template[i].setAttribute("href",json[template[i].dataset.wpTemplate]);
+            } else {
             template[i].innerHTML = json[template[i].dataset.wpTemplate];
+            }
         }
+    },
+    insertCollections: function (json, layout) {
+        // how to define the collection
+        //
+        console.log(json);
+        console.log(layout); 
+        var list = layout.querySelector("li");
+        json.posts.forEach(function (post, index) {
+            if (index == 0) {
+                // this not need to clone
+                console.log("not need to clone");
+                console.log(layout.querySelector("[data-wp-template]"));
+                util.insertContent(post, layout.querySelectorAll("[data-wp-template]")); 
+            } else {// this need to clone 
+                var virtual = list.cloneNode(true);
+                util.insertContent(post, virtual.querySelectorAll("[data-wp-template]")); 
+                layout.appendChild(virtual);
+            }
+        });
     },
     insertError: function (json, template) {
         // TODO:
@@ -138,22 +224,37 @@ var util = {
 };
 
 (function () {
-    var parent, root, childrens, wpElements, baseUrl;
+    var parent, root, wpElementTag,wpCollectionTag, wpElements, baseUrl, wpCollection;
 
-    parent = document.querySelector("[data-wp-source");
-    root = RootElement(parent);
-    childrens = root.getChildElements();
-    wpElements = [];
+    parent = document.querySelectorAll("[data-wp-source]");
+    
+    for (var j = 0; j < parent.length; j++) { 
+        root = RootElement(parent[j]);
+        wpElementTag = root.findWPElements();
+        wpCollectionTag = root.findWPCollections();
+        wpElements = [];
+        wpCollection = [];
+        var baseUrl = root.getSourceURL();
+        for (var i = 0; i < wpElementTag.length; i++) {
+            wpElements.push(WPElement(wpElementTag[i]));
+        }
+        for (var j = 0; j < wpCollectionTag.length; j++) {
+            wpCollection.push(WPCollections(wpCollectionTag[j]));
+        }
 
-    for (var i = 0; i < childrens.length; i++) {
-        wpElements.push(WPElement(childrens[i]));
-    }
-
-    var baseUrl = root.getSourceURL();
-    wpElements.forEach(function(el) {
-        var template = el.self().querySelectorAll("[data-wp-template]");
-        util.ajax(el.requestUrl(baseUrl), function(err, data) {
-            util.insertContent(data, template);
+        wpElements.forEach(function(el) {
+            var template = el.self().querySelectorAll("[data-wp-template]");
+            util.ajax(el.requestUrl(baseUrl), function(err, data) {
+                util.insertContent(data, template);
+            });
         });
-    });
+
+        wpCollection.forEach(function (col) {
+            console.log(baseUrl);
+             util.ajax(col.requestUrl(baseUrl), function(err, data) {
+                util.insertCollections(data, col.template());
+            });
+
+        });
+    }
 }());
