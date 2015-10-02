@@ -189,8 +189,7 @@ var util = {
             if (template[i].tagName === "IMG") {
                 template[i].setAttribute("src",
                     json[template[i].dataset.wpTemplate]);
-            }
-            if (template[i].tagName === "A") {
+            } else if (template[i].tagName === "A") {
                 template[i].setAttribute("href",
                     json[template[i].dataset.wpTemplate]);
             } else {
