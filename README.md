@@ -5,81 +5,69 @@ Astro
 
 This framework to use to generate wordpress content by simple writing HTML tag and 0 line of javasript
 
-###Example:
-```html
-<div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
-    <div data-wp-element="posts/10" >
+**Hightlight:**
+* Fetch 1 post from wordpress
+* Fetch all posts in 1 category and use custom template
+* 
 
-        <!-- start define template here -->
 
-        <div data-wp-template="title"></div>
-        <img data-wp-template="featured_image"></div>
-        <div data-wp-tempalte="content"></div>
-    </div>
-</div>
+###Getting Started
+___
+####Download
+Astro .js can be download from [Here](https://github.com/Ting-y/Astro/releases)
+
+####Include it into your html
+
+Include astro file inside body tag and before any Javascript execuetion block
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>Astro</title>
+</head>
+<body>
+
+<script src="astro-wp-element.js"></script>
+</body>
+</html>
 ```
 
-What it will be looks like after the library excecuted
+####Create a template to render json content
 
-```html
+**Examples**
 
-<div data-wp-resouce="https://public-api.wordpress.com/rest/v1.1/sites/98941271/">
-    <div data-wp-element="post/10">
-
-        <!-- start define template here -->
-
-        <div data-wp-template="title">json api advanture 2</div>
-        <img data-wp-template="featured_image" src="http://mywordpress.com/cat.png"></img>
-        <div data-wp-template="content">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-                eu nulla sollicitudin, gravida massa at, aliquet turpis. Quisque 
-                accumsan, massa ac egestas imperdiet, lorem dolor tempus velit, non pellentesque ex.
-            </p>
-        </div>
-    </div>
-</div>
-
-```
-### How to use it:
-1. Make a wrapper html tag and put `data-api-source` attribute
-2. make a div tag inside it that contains `data-wp-element` attribute and give it value
-3. create a template inside the div tag and use `data-wp-template` and give it value
-    [parameter list](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/%24post_ID/#apidoc-response)
+* [Display specific post](https://github.com/Ting-y/Astro/blob/master/examples/example1-display-single-post.html)
+* [Display a list of post](https://github.com/Ting-y/Astro/blob/master/examples/example2-display-collections.html)
 
 
-####Rules of data attribute
-| data attribute      | Require | Values                          | Description                        |
-|---------------------|---------|---------------------------------|------------------------------------|
-| data-wp-source      | Yes     | your wordpress url              |Read Detail                          |
+####Data attributes
+
+**Summary**
+
+| Data Attribute      | Required | Values                          | Description                     |
+|---------------------|---------|---------------------------------|---------------------------------|
+| data-wp-source      | Yes     | your wordpress url              | The wordpress blog              |
 | data-wp-element     | Yes     | posts/#id                       | This will return the specific post |
-| data-wp-options     | No      | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
-| data-wp-tempalte    | Yes     | title/content/featured_image    | The return field you want to display|
+| data-wp-template    | Yes     | title/content/featured_image    | The return field you want to display|
+| data-wp-options     | ~Yes    | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
+| data-wp-layout      | ~Yes    | list                            | This will render a list of post     |
 
-#####More detail
-```html
-    1. If your blog is host at wordpress.com
-    data-api-source: https://public-api.wordpress.com/rest/v1.1/sites/ + YOUR BLOG URL
-    ex. https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com
-    
-    2. Jetpack plugin
-    data-api-source: https://public-api.wordpress.com/rest/v1.1/sites/ + YOUR BLOG URL
-```
-
+[Data attributes usage detail & example](https://github.com/Ting-y/Astro/wiki/Data-attributes-usage-and-explanation)
 
 ###Support:
 
--  blog in wordpress.com
+-  blog on wordpress.com
 -  self hosted blog and enabled jetpack json-api plugin
 
 
 ###Todo:
 - More Unit tests
-- Implement render collections
-- Implement get content from more than 1 source (standalone wordpress site using wp-api, json-api plugin)
+- Implement get content from more than 1 source (standalone wordpress site using wp-api or json-api plugin)
 
 ###Issues:
 
-- Accessibilit
+- Accessibility
 - SEO
 
 ###Reference:
