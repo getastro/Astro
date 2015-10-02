@@ -64,17 +64,14 @@ Include astro file inside body tag and before any Javascript execuetion block
 ###Todo:
 - More Unit tests
 - Implement get content from more than 1 source (standalone wordpress site using wp-api or json-api plugin)
-
-###Issues:
-
 - Accessibility
-- SEO
 
 ###Reference:
 WordPress official Restful api endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
 
-
+###Questions:question::
+If you have any issues when using astro, please create a new issue or inbox :envelope: @ting-y
 
 
 
