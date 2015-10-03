@@ -45,13 +45,13 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 **Summary**
 
-| Data Attribute      | Required | Values                          | Description                     |
-|---------------------|----------|---------------------------------|---------------------------------|
-| data-wp-source      | Yes      | your wordpress url              | The wordpress blog              |
-| data-wp-element     | Yes      | posts/#id                       | This will return the specific post |
-| data-wp-template    | Yes      | title/content/featured_image    | The return field you want to display|
-| data-wp-options     | ~Yes     | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
-| data-wp-layout      | ~Yes     | list                            | This will render a list of post |
+| Data Attribute      | Required |Description                            |
+|---------------------|----------|---------------------------------------|
+| data-wp-source      | Yes      | To identify the content source
+| data-wp-element     | Yes      | Magic is is happening within this block |
+| data-wp-template    | Yes      | The return field you want to display|
+| data-wp-options     | ~Yes     | RESTful API qury parameters            |
+| data-wp-layout      | ~Yes     | This is required if rendering multiple posts |
 
 [Data attributes usage detail & example](https://github.com/Ting-y/Astro/wiki/Data-attributes-usage-and-explanation)
 
@@ -71,7 +71,4 @@ WordPress official RESTful API endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
 
 ###Questions:
-If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or inbox @ting-y
-
-
-
+If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or inbox [@ting-y]
