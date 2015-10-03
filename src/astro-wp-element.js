@@ -1,12 +1,13 @@
-// Astro Framework - Wordpress verison v0.1.0
+// Astro Framework - Wordpress verison(Beta)
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 1st, 2015
+// Last updated: October 3st, 2015
 
 // Support:
 //  Wordpress.org, the official rest api endpoint
 //  Jetpack plugin enable that support official endpoint
 //
+(function () {
 'use strict';
 
 function RootElement(domBlock) {
@@ -39,7 +40,6 @@ function RootElement(domBlock) {
         countCollections: function () {
             return root.querySelectorAll("[data-wp-collection]").length;
         }
-
     };
 }
 
@@ -226,7 +226,7 @@ var util = {
 
 };
 
-(function () {
+function ASTROWP () {
     var parent, root, wpElementTag,wpCollectionTag, wpElements, baseUrl,
         wpCollection;
     // find the source, key to fetch content from more 1 wordpress site
@@ -259,4 +259,10 @@ var util = {
             });
         });
     }
-}());
+}
+    // run astro
+    ASTROWP();    
+}).call(this);
+
+
+
