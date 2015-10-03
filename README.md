@@ -71,4 +71,4 @@ WordPress official RESTful API endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
 
 ###Questions:
-If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or inbox [@ting-y]
+If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or Email [Ting](mailto:ting.yatingyang@gmail.com)
