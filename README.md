@@ -37,7 +37,7 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 **Examples**
 
-* [Display specific post](https://github.com/Ting-y/Astro/blob/master/examples/example1-display-single-post.html)
+* [Display a specific post](https://github.com/Ting-y/Astro/blob/master/examples/example1-display-single-post.html)
 * [Display a list of post](https://github.com/Ting-y/Astro/blob/master/examples/example2-display-collections.html)
 
 
@@ -46,19 +46,19 @@ Include astro file inside body tag and before any Javascript execuetion block
 **Summary**
 
 | Data Attribute      | Required | Values                          | Description                     |
-|---------------------|---------|---------------------------------|---------------------------------|
-| data-wp-source      | Yes     | your wordpress url              | The wordpress blog              |
-| data-wp-element     | Yes     | posts/#id                       | This will return the specific post |
-| data-wp-template    | Yes     | title/content/featured_image    | The return field you want to display|
-| data-wp-options     | ~Yes    | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
-| data-wp-layout      | ~Yes    | list                            | This will render a list of post     |
+|---------------------|----------|---------------------------------|---------------------------------|
+| data-wp-source      | Yes      | your wordpress url              | The wordpress blog              |
+| data-wp-element     | Yes      | posts/#id                       | This will return the specific post |
+| data-wp-template    | Yes      | title/content/featured_image    | The return field you want to display|
+| data-wp-options     | ~Yes     | search=youNameIt&number=2       |  see [Query Parameter](https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/)   |
+| data-wp-layout      | ~Yes     | list                            | This will render a list of post |
 
 [Data attributes usage detail & example](https://github.com/Ting-y/Astro/wiki/Data-attributes-usage-and-explanation)
 
 ###Support:
 
 -  blog on wordpress.com
--  self hosted blog and enabled jetpack json-api plugin
+-  self hosted(wordpress.org) with jetpack json-api plugin enable
 
 
 ###Todo:
@@ -67,11 +67,11 @@ Include astro file inside body tag and before any Javascript execuetion block
 - Accessibility
 
 ###Reference:
-WordPress official Restful api endpoint
+WordPress official RESTful API endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
 
-###Questions:question::
-If you have any issues when using astro, please create a new issue or inbox :envelope: @ting-y
+###Questions:
+If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or inbox @ting-y
 
 
 
