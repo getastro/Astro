@@ -1,11 +1,11 @@
 // Astro Framework - Wordpress verison(Beta)
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 3st, 2015
+// Last updated: October 3rd, 2015 at WordCamp Toronto
 
 // Support:
-//  Wordpress.org, the official rest api endpoint
-//  Jetpack plugin enable that support official endpoint
+//  Wordpress.com, the official RESTful api endpoint
+//  Wordpress.org (self hosted) with Jetpack json api plugin 
 //
 (function () {
 'use strict';
