@@ -17,7 +17,8 @@ function RootElement(domBlock) {
     function validateSource (url) {
         return (url.search(/wordpress/) != -1);
     } 
-    return {
+    
+    function getSourceURL () {
         getSourceURL: function () {
             // root should expect
             if (root.dataset.wpSource.slice(-1) !== "/") {
@@ -25,21 +26,30 @@ function RootElement(domBlock) {
             } else {
                 return root.dataset.wpSource;
             }
-        },
-        findWPElements: function () {
-            return root.querySelectorAll("[data-wp-element]");
-        },
-        findWPCollections: function () {
-            return root.querySelectorAll("[data-wp-collection]");
-        },
+    }
 
-        countElements: function () {
-            return root.querySelectorAll("[data-wp-element]").length;
-        },
+    function findWPElements () {
+        return root.querySelectorAll("[data-wp-element]");
+    }
 
-        countCollections: function () {
-            return root.querySelectorAll("[data-wp-collection]").length;
-        }
+
+    function findWPCollections () {
+        return root.querySelectorAll("[data-wp-collection]");
+    }
+
+    function countElements () {
+        return root.querySelectorAll("[data-wp-element]").length;
+    }
+
+    function countCollections () {
+        return root.querySelectorAll("[data-wp-collection]").length;
+    }
+    return {
+        getSourceURL: getSourceURL,
+        findWPElements: findWPElements, 
+        findWPCollections: findWPCollections, 
+        countElements: countElements, 
+        countCollections: countCollections 
     };
 }
 
