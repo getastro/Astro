@@ -19,13 +19,12 @@ function RootElement(domBlock) {
     } 
     
     function getSourceURL () {
-        getSourceURL: function () {
-            // root should expect
-            if (root.dataset.wpSource.slice(-1) !== "/") {
-                return root.dataset.wpSource + "/";
-            } else {
-                return root.dataset.wpSource;
-            }
+        // root should expect
+        if (root.dataset.wpSource.slice(-1) !== "/") {
+            return root.dataset.wpSource + "/";
+        } else {
+            return root.dataset.wpSource;
+        }
     }
 
     function findWPElements () {
@@ -81,32 +80,36 @@ function WPCollections (domEl) {
         return criteria;
     }
 
-
-    return {
-        requestUrl: function (sourceUrl) {
-            // build the request url
-            var component = getSearchCriteria(element);          
-            var url;
-            if (component.hasOwnProperty("type")) {
-                url = "";
-                url += sourceUrl + component.type + "/";
-                if (!component.hasOwnProperty("option")) {
-                    return url;
-                } else {
-                    // if contains wp-option
-                    url += "?" + component.option;
-                }
+    function requestUrl (sourceUrl) {
+        // build the request url
+        var component = getSearchCriteria(element);          
+        var url;
+        if (component.hasOwnProperty("type")) {
+            url = "";
+            url += sourceUrl + component.type + "/";
+            if (!component.hasOwnProperty("option")) {
+                return url;
             } else {
-                // this may not happen if no type
+                // if contains wp-option
+                url += "?" + component.option;
             }
-            return url;    
-        },
-        self: function () {
-            return element;
-        },
-        template: function () {
-            return element.querySelector("[data-wp-layout]");
+        } else {
+            // this may not happen if no type
         }
+        return url;    
+    }
+
+    function self () {
+        return element;
+    }
+
+    function template () {
+        return element.querySelector("[data-wp-layout]");
+    }
+    return {
+        requestUrl: requestUrl,
+        self: self, 
+        template: template 
     }
 }
 
