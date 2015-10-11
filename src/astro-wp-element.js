@@ -151,32 +151,38 @@ function WPElement(domEl) {
         }
 
     }
-    return {
-        requestUrl: function (sourceUrl) {
-            var component = getSearchCriteria(element);
-            if (component){
-                var url = '';
-                url += processUrl(sourceUrl);
-                if (component.itemId) {
-                    url += component.type + "/" + component.itemId + "/";
-                    if (component.options) {
-                        url+= "?" + component.options;
-                    }
-                } else {
-                    url += component.type + "/";
-                    if (component.options) {
-                        url+= "?" + component.options;
-                    }
+
+    function requestUrl (sourceUrl) {
+         var component = getSearchCriteria(element);
+        if (component){
+            var url = '';
+            url += processUrl(sourceUrl);
+            if (component.itemId) {
+                url += component.type + "/" + component.itemId + "/";
+                if (component.options) {
+                    url+= "?" + component.options;
                 }
-                return url;
             } else {
-                return null;
+                url += component.type + "/";
+                if (component.options) {
+                    url+= "?" + component.options;
+                }
             }
-        },
-        self: function () {
-            return element;
+            return url;
+        } else {
+            return null;
         }
-    };
+    }
+
+    function self () {
+        return element;
+    }
+
+
+    return {
+        requestUrl: requestUrl,
+        self: self 
+    }
 }
 
 var util = {
@@ -276,6 +282,3 @@ function ASTROWP () {
     // run astro
     ASTROWP();    
 }).call(this);
-
-
-
