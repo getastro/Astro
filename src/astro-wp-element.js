@@ -43,6 +43,8 @@ function RootElement(domBlock) {
     function countCollections () {
         return root.querySelectorAll("[data-wp-collection]").length;
     }
+    
+    // public properties
     return {
         getSourceURL: getSourceURL,
         findWPElements: findWPElements, 
@@ -106,6 +108,9 @@ function WPCollections (domEl) {
     function template () {
         return element.querySelector("[data-wp-layout]");
     }
+
+
+    // public properties
     return {
         requestUrl: requestUrl,
         self: self, 
@@ -179,6 +184,7 @@ function WPElement(domEl) {
     }
 
 
+    // public properties
     return {
         requestUrl: requestUrl,
         self: self 
@@ -197,6 +203,7 @@ var util = {
 
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                // JSON.parse will crash when has unexpected response 'json'
                 callback(null, JSON.parse(xmlhttp.responseText));
             }
         };
@@ -204,6 +211,7 @@ var util = {
         xmlhttp.send();
     },
     insertContent: function (json, template) {
+        // json = {post}
         for (var i = 0; i < template.length; i++) {
             if (template[i].tagName === "IMG") {
                 template[i].setAttribute("src",
@@ -217,8 +225,8 @@ var util = {
         }
     },
     insertCollections: function (json, layout) {
-        // how to define the collection
         //
+        // json = [{post}, {posts} ..] 
         var list = layout.querySelector("li");
         json.posts.forEach(function (post, index) {
             if (index == 0) {
@@ -251,6 +259,7 @@ function ASTROWP () {
     // find the source, key to fetch content from more 1 wordpress site
     parent = document.querySelectorAll("[data-wp-source]");
     // querySelectorAll return NodeList, not array 
+    // foreach doesn't work in this case
     for (var j = 0; j < parent.length; j++) { 
         root = RootElement(parent[j]); // create ROOT object
         wpElementTag = root.findWPElements();
@@ -268,7 +277,17 @@ function ASTROWP () {
         wpElements.forEach(function(el, index) {
             var template = el.self().querySelectorAll("[data-wp-template]");
             util.ajax(el.requestUrl(baseUrl), function(err, data) {
-                util.insertContent(data, template);
+                // if expecting data = {post}
+                // this will break if the data in unexepeted format
+                // Only reder first post if exist of not
+                if (!data.hasOwnProperty('posts') ){
+                    util.insertContent(data, template);
+                } else {
+                    // only display the 1st post when doing search
+                    // use data-wp-options="category=demo"
+                    // it can be display the most recent post under demo
+                    util.insertContent(data.posts[0], template);
+                }
             });
         });
 
