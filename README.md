@@ -9,6 +9,7 @@ Astro is a JS library framework to render JSON content, regardless skill level.
 * Fetch 1 post from wordpress
 * Fetch all posts in 1 category and use custom template
 * Fetch post(s) from different WordPress blogs
+* Fetch the most recently post under the specific category
 
 ###Getting Started
 ___
@@ -33,7 +34,7 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 * [Display a specific post](https://github.com/Ting-y/Astro/blob/master/examples/example1-display-single-post.html)
 * [Display a list of post](https://github.com/Ting-y/Astro/blob/master/examples/example2-display-collections.html)
-
+* [Display the most recent post in the category](https://github.com/Ting-y/Astro/blob/master/examples/example3-display-most-recently-post.html)
 
 ####Data attributes
 
@@ -44,7 +45,7 @@ Include astro file inside body tag and before any Javascript execuetion block
 | data-wp-source      | Yes      | To identify the content source
 | data-wp-element     | Yes      | Magic is is happening within this block |
 | data-wp-template    | Yes      | The return field you want to display|
-| data-wp-options     | When displaying collection     | RESTful API qury parameters            |
+| data-wp-options     | When using query parameter     | RESTful API qury parameters            |
 | data-wp-layout      | When displaying collection     | This is required if rendering multiple posts |
 
 [Data attributes usage detail & example](https://github.com/Ting-y/Astro/wiki/Data-attributes-usage-and-explanation)
