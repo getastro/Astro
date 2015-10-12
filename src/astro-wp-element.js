@@ -1,12 +1,15 @@
-// Astro Framework - Wordpress verison(Beta)
+// Astro Framework - Wordpress verison 0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 3rd, 2015 at WordCamp Toronto
-
+// Last updated: October 11th, 2015
+//
 // Support:
 //  Wordpress.com, the official RESTful api endpoint
 //  Wordpress.org (self hosted) with Jetpack json api plugin 
-//
+//  
+// Hightlight:
+// 1. enable the collapse feature in bootstrap
+// 2. rewrit the list render, ul and li will remove
 (function () {
 'use strict';
 
@@ -212,6 +215,7 @@ var util = {
     },
     insertContent: function (json, template) {
         // json = {post}
+        // insert each element with class = "post" + json["ID"]
         for (var i = 0; i < template.length; i++) {
             if (template[i].tagName === "IMG") {
                 template[i].setAttribute("src",
@@ -227,7 +231,7 @@ var util = {
     insertCollections: function (json, layout) {
         //
         // json = [{post}, {posts} ..] 
-        var list = layout.querySelector("li");
+        var list = layout.querySelector("*");
         json.posts.forEach(function (post, index) {
             if (index == 0) {
                 // this not need to clone
