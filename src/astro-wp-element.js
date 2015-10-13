@@ -1,15 +1,14 @@
-// Astro Framework - Wordpress verison 0.2.0
+// Astro Framework - Wordpress verison 0.1.1
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 11th, 2015
+// Last updated: October 13th, 2015
 //
 // Support:
 //  Wordpress.com, the official RESTful api endpoint
 //  Wordpress.org (self hosted) with Jetpack json api plugin 
 //  
 // Hightlight:
-// 1. enable the collapse feature in bootstrap
-// 2. rewrit the list render, ul and li will remove
+// 1. rewrit the list render, ul and li will remove
 (function () {
 'use strict';
 
