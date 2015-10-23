@@ -3,13 +3,15 @@ Astro
 
 [![Join the chat at https://gitter.im/Ting-y/Astro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Ting-y/Astro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Astro is a JS library framework to render JSON content, regardless skill level.
+A JS library framework to render JSON content, regardless skill level.
 
-**Hightlight:**
-* Fetch 1 post from wordpress
-* Fetch all posts in 1 category and use custom template
-* Fetch post(s) from different WordPress blogs
-* Fetch the most recently post under the specific category
+Astro is a JS library framework to fetch JSON in a simple way. Using only data attributes in the HTML markup, it renders publicly available JSON content that does not require authentication from WordPress.com or WordPress.org websites using Jetpack‘s RESTful JSON API. See it in action: (Github URL).
+
+**Hightlights:**
+* Fetch from a single API source or from multiple API sources in the same document
+* Fetch a single page, single post, or a latest post (category is optional)
+* Fetch collections (category and number of posts are optional)
+* Templating parameters (title, content, featured image, etcetera)
 
 ###Getting Started
 ___
