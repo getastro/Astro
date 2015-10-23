@@ -16,7 +16,7 @@ Astro is a JS library framework to fetch JSON in a simple way. Using only data a
 ###Getting Started
 ___
 ####Download
-astro-wp-element.js can be download from [Here](https://github.com/Ting-y/Astro/releases)
+Include astro-wp-element.js file [Here](https://github.com/Ting-y/Astro/releases) inside body tag; before any other Javascript execution block.
 
 ####Include it into your html
 
