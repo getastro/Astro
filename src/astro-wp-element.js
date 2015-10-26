@@ -1,23 +1,31 @@
-// Astro Framework - Wordpress verison 0.1.1
+// Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 13th, 2015
+// Last updated: October 25th, 2015
 //
 // Support:
-//  Wordpress.com, the official RESTful api endpoint
-//  Wordpress.org (self hosted) with Jetpack json api plugin 
+//  WordPress.com, the official RESTful api endpoint
+//  WordPress.org (self hosted) with Jetpack json-api plugin 
 //  
-// Hightlight:
-// 1. rewrit the list render, ul and li will remove
+// Highlights:
+// 1. Remove data-wp-collection attribute
+// 2. Combine collection to wp-element
+// 3. data-wp-layout is the require attribute
+//
+var AstroWP = AstroWP || {};
+
 (function () {
 'use strict';
+// Expose to global, for unit test
+AstroWP.RootElement = RootElement;
+AstroWP.Elments = WPElement;
 
 function RootElement(domBlock) {
     var url, root;
     var root = domBlock;
     url = root.dataset.wpSource;
     function validateSource (url) {
-        return (url.search(/wordpress/) != -1);
+        return (url.search(/wordpress|api/) != -1);
     } 
     
     function getSourceURL () {
@@ -34,91 +42,19 @@ function RootElement(domBlock) {
     }
 
 
-    function findWPCollections () {
-        return root.querySelectorAll("[data-wp-collection]");
-    }
-
     function countElements () {
         return root.querySelectorAll("[data-wp-element]").length;
     }
 
-    function countCollections () {
-        return root.querySelectorAll("[data-wp-collection]").length;
-    }
     
     // public properties
     return {
-        getSourceURL: getSourceURL,
-        findWPElements: findWPElements, 
-        findWPCollections: findWPCollections, 
-        countElements: countElements, 
-        countCollections: countCollections 
+        SourceURL: getSourceURL,
+        WPElements: findWPElements, 
+        ElementsLength: countElements 
     };
 }
 
-function WPCollections (domEl) {
-    var element, expectedType;
-    expectedType = ["posts", "categories"];
-
-    element = domEl;
-
-    function getSearchCriteria(element) {
-        var criteria, data;
-        criteria = {};
-        if(!element) {
-            return;
-        }
-        // get the dataset
-        data = element.dataset;
-        if (data.wpCollection) {
-            criteria.type = data.wpCollection;
-        }
-        if (data.wpOptions) {
-            criteria.option = data.wpOptions;   
-        }
-        if (expectedType.indexOf(criteria.type) === -1) {
-            console.error("ASTRO Error: data-wp-element only " 
-                        + "support posts and category");
-            return null;
-        }
-        return criteria;
-    }
-
-    function requestUrl (sourceUrl) {
-        // build the request url
-        var component = getSearchCriteria(element);          
-        var url;
-        if (component.hasOwnProperty("type")) {
-            url = "";
-            url += sourceUrl + component.type + "/";
-            if (!component.hasOwnProperty("option")) {
-                return url;
-            } else {
-                // if contains wp-option
-                url += "?" + component.option;
-            }
-        } else {
-            // this may not happen if no type
-        }
-        return url;    
-    }
-
-    function self () {
-        return element;
-    }
-
-    function template () {
-        return element.querySelector("[data-wp-layout]");
-    }
-
-
-    // public properties
-    return {
-        requestUrl: requestUrl,
-        self: self, 
-        template: template 
-    }
-}
 
 function WPElement(domEl) {
     var element, expectedType;
@@ -281,8 +217,8 @@ function ASTROWP () {
             var template = el.self().querySelectorAll("[data-wp-template]");
             util.ajax(el.requestUrl(baseUrl), function(err, data) {
                 // if expecting data = {post}
-                // this will break if the data in unexepeted format
-                // Only reder first post if exist of not
+                // this will break if the data in unexpected format
+                // Only render first post if exist of not
                 if (!data.hasOwnProperty('posts') ){
                     util.insertContent(data, template);
                 } else {
@@ -302,5 +238,4 @@ function ASTROWP () {
     }
 }
     // run astro
-    ASTROWP();    
-}).call(this);
+})();
