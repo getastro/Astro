@@ -222,7 +222,7 @@
         // Create the wPElements
         WPBlogs.forEach(function (WPBlog) {
             for (j = 0; j < WPBlog.ElementsLength(); j += 1) {
-                el = wPElement(WPBlog.wPElements()[j], WPBlog.SourceURL());
+                el = wPElement(WPBlog.WPElements()[j], WPBlog.SourceURL());
                 wPElements.push(el);
             }
         });
