@@ -1,0 +1,23 @@
+{
+  "name": "astro-wp",
+  "version": "0.2.0",
+  "description": "A JS library framework to render JSON content, regardless skill level.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ting-y/Astro.git"
+  },
+  "keywords": [
+    "Astro",
+    "WordPress"
+  ],
+  "author": "Ting Yang & Hector Jarquin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ting-y/Astro/issues"
+  },
+  "homepage": "https://github.com/Ting-y/Astro#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jslint": "^0.2.2"
+  }
+}
