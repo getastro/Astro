@@ -1,7 +1,7 @@
 // Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: October 25th, 2015
+// Last updated: November  1st, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -19,17 +19,90 @@ var AstroWP = AstroWP || {};
 // Expose to global, for unit test
 AstroWP.RootElement = RootElement;
 AstroWP.Elments = WPElement;
+//AstroWP.Util = util;
+//
+var WPBlogs = []; // this to store the HTML BLOCKS, each Item = contents from 1 blog
+var WPElements = [];
 
-function RootElement(domBlock) {
-    var url, root;
-    var root = domBlock;
+
+function Init () {
+    // Step 1: Find the WP blocks, each block = 1 blog
+    var WPBlogsRaw = document.querySelectorAll("[data-wp-source]");
+    
+    // Create some WPBlogs
+    for(var i = 0; i < WPBlogsRaw.length; i++) { 
+        WPBlogs.push(RootElement(WPBlogsRaw[i]));
+    }
+    
+    // Create the WPElements
+    WPBlogs.forEach(function (WPBlog) {
+        for(var j = 0; j < WPBlog.ElementsLength(); j++) {
+            console.log(WPBlog);
+            var el = WPElement(WPBlog.WPElements()[j], WPBlog.SourceURL());
+            WPElements.push(el);
+        }
+    });
+
+    
+    // Create Event 
+    // TODO yty
+}
+
+function main () {
+    Init();
+    
+
+    // Step 3: Render the wpElememts(fill in the content)
+    RenderContent(WPElements);
+}
+
+
+function _filterData(data) {
+    // filter out a list of post and only return first post
+    if (data.posts) {
+        return data.posts[0];
+    } else {
+        return data;
+    }
+
+}
+
+function RenderContent (elements) {
+    elements.forEach(function (element) {
+        util.ajax(element.requestUrl(), function (err, data) {
+            var layout = element.layout();
+            switch (layout) {
+                case "list":
+                    util.insertCollections(data, element.nodes);
+                    break;
+                case "single":
+                    data = _filterData(data);
+                    util.insertContent(data, element.template());
+                    break;
+                default:
+                    // assume data-wp-layout is not definded
+                    data = _filterData(data);
+                    util.insertContent(data, element.template());
+            }
+        });
+    });
+}
+
+
+function RootElement(rootNode) {
+    var url, root, elements;
+    var root = rootNode;
     url = root.dataset.wpSource;
+
+    elements = root.querySelectorAll("[data-wp-element]");
     function validateSource (url) {
+        // Don't Trust user data
         return (url.search(/wordpress|api/) != -1);
     } 
     
     function getSourceURL () {
-        // root should expect
+        // check if the root url is end with / or not
+        // otherwise append / at tail
         if (root.dataset.wpSource.slice(-1) !== "/") {
             return root.dataset.wpSource + "/";
         } else {
@@ -38,12 +111,12 @@ function RootElement(domBlock) {
     }
 
     function findWPElements () {
-        return root.querySelectorAll("[data-wp-element]");
+        return elements;
     }
 
 
     function countElements () {
-        return root.querySelectorAll("[data-wp-element]").length;
+        return elements.length;
     }
 
     
@@ -53,15 +126,47 @@ function RootElement(domBlock) {
         WPElements: findWPElements, 
         ElementsLength: countElements 
     };
-}
+};
 
 
-function WPElement(domEl) {
-    var element, expectedType;
+function WPElement(wpElementNode, sourceUrl) {
+    var element, expectedType, layout, options, type1, dataset, templates;
     expectedType = ["posts", "categories"];
 
-    element = domEl;
+    element = wpElementNode;
+    
+    dataset = element.dataset;
+    templates = element.querySelectorAll('[data-wp-template]'); 
+
+    function type () {
+        if (dataset.wpElement !== null) {
+            if (dataset.wpElment.search(/posts|categories/) !== -1) {
+                return datset.wpElement; 
+            }   
+        }
+        return null;
+    }
+
+    function layout () {
+        if (dataset.wpLayout) {
+            if (dataset.wpLayout.search(/list|single|slider/) !== -1) {
+                return dataset.wpLayout;
+            }
+        }
+        // if layout is not defined, we assume it means render single item
+        return "single";
+    }
+    
+    function options () {
+        if (dataset.wpOptions !== null) {
+            // TODO tyty validation
+            return dataset.wpOptions;
+        }
+        return null;
+    }
+
     function getSearchCriteria (element) {
+
         var criteria, data, index;
         if (!element) {
             return;
@@ -86,13 +191,13 @@ function WPElement(domEl) {
         }
         return criteria;
     }
-    function processUrl (url) {
-        if(url.slice(-1) !== "/") {
-            return url + "/";
-        } else {
-            return url;
-        }
 
+    function processUrl () {
+        if(sourceUrl.slice(-1) !== "/") {
+            return sourceUrl + "/";
+        } else {
+            return sourceUrl;
+        }
     }
 
     function requestUrl (sourceUrl) {
@@ -117,17 +222,22 @@ function WPElement(domEl) {
         }
     }
 
-    function self () {
-        return element;
+    
+    function getTemplates() {
+        return templates;
     }
-
-
+    function getNodes() {
+        return elements;
+    }
     // public properties
     return {
         requestUrl: requestUrl,
-        self: self 
-    }
-}
+        layout: layout,
+        render: renderContent,
+        template: getTemplates,
+        nodes: element
+    };
+};
 
 var util = {
     ajax: function (url, callback) {
@@ -192,50 +302,7 @@ var util = {
 
 };
 
-function ASTROWP () {
-    var parent, root, wpElementTag,wpCollectionTag, wpElements, baseUrl,
-        wpCollection;
-    // find the source, key to fetch content from more 1 wordpress site
-    parent = document.querySelectorAll("[data-wp-source]");
-    // querySelectorAll return NodeList, not array 
-    // foreach doesn't work in this case
-    for (var j = 0; j < parent.length; j++) { 
-        root = RootElement(parent[j]); // create ROOT object
-        wpElementTag = root.findWPElements();
-        wpCollectionTag = root.findWPCollections();
-        wpElements = [];
-        wpCollection = [];
-        baseUrl = root.getSourceURL();
-        for (var i = 0; i < wpElementTag.length; i++) {
-            wpElements.push(WPElement(wpElementTag[i]));
-        }
+main();
 
-        for (var k = 0; k < wpCollectionTag.length; k++) {
-            wpCollection.push(WPCollections(wpCollectionTag[k]));
-        }
-        wpElements.forEach(function(el, index) {
-            var template = el.self().querySelectorAll("[data-wp-template]");
-            util.ajax(el.requestUrl(baseUrl), function(err, data) {
-                // if expecting data = {post}
-                // this will break if the data in unexpected format
-                // Only render first post if exist of not
-                if (!data.hasOwnProperty('posts') ){
-                    util.insertContent(data, template);
-                } else {
-                    // only display the 1st post when doing search
-                    // use data-wp-options="category=demo"
-                    // it can be display the most recent post under demo
-                    util.insertContent(data.posts[0], template);
-                }
-            });
-        });
+}());
 
-        wpCollection.forEach(function (col, index) {
-             util.ajax(col.requestUrl(baseUrl), function(err, data) {
-                util.insertCollections(data, col.template());
-            });
-        });
-    }
-}
-    // run astro
-})();
