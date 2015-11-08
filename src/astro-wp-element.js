@@ -1,7 +1,7 @@
 // Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: November  1st, 2015
+// Last updated: November 7th, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -13,10 +13,12 @@
 // 3. data-wp-layout is the require attribute
 //
 
+var AstroWP = AstroWP || {};
 (function () {
     'use strict';
     var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
         wPElements = [];
+
     function rootElement(rootNode) {
         var root, elements;
         root = rootNode;
@@ -31,12 +33,15 @@
             }
             return root.dataset.wpSource;
         }
+
         function findWPElements() {
             return elements;
         }
+
         function countElements() {
             return elements.length;
         }
+
         return {
             SourceURL: getSourceURL,
             WPElements: findWPElements,
@@ -50,6 +55,7 @@
         element = wpElementNode;
         dataset = element.dataset;
         templates = element.querySelectorAll('[data-wp-template]');
+
         function layout() {
             if (dataset.wpLayout) {
                 if (dataset.wpLayout.search(/list|single|slider/) !== -1) {
@@ -111,6 +117,7 @@
             }
             return null;
         }
+
         function getTemplates() {
             return templates;
         }
@@ -237,5 +244,9 @@
     }
 
     main();
+    AstroWP= {
+        Root: rootElement,
+        wpElement: wPElement
+    }
 }());
 
