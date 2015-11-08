@@ -13,9 +13,9 @@
 // 3. data-wp-layout is the require attribute
 //
 
-var AstroWP = AstroWP || {};
 (function () {
     'use strict';
+    var AstroWP; // namespa
     var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
         wPElements = [];
 
@@ -81,6 +81,7 @@ var AstroWP = AstroWP || {};
                 criteria.type = data.wpElement;
             }
             if (data.wpOptions) {
+                // check the options
                 criteria.options = data.wpOptions;
             }
             if (expectedType.indexOf(criteria.type) === -1) {
@@ -98,6 +99,7 @@ var AstroWP = AstroWP || {};
         }
 
         function requestUrl(sourceUrl) {
+            // 
             var component = getSearchCriteria(element);
             if (component) {
                 var url = '';
@@ -119,6 +121,10 @@ var AstroWP = AstroWP || {};
         }
 
         function getTemplates() {
+            // get templates value and add that into request url
+            // 'field=templateValue1, templateValue2...etc'
+            // reduce the http response data size
+            // FIXME yty
             return templates;
         }
         // public properties
@@ -190,6 +196,9 @@ var AstroWP = AstroWP || {};
     function filterData(data) {
         // filter out a list of post and only return first post
         if (data.posts) {
+            // FIXME yty
+            // should not return all post
+            // fix the request string to return only 1 post
             return data.posts[0];
         }
         return data;
@@ -221,12 +230,12 @@ var AstroWP = AstroWP || {};
     function init() {
         // Step 1: Find the WP blocks, each block = 1 blog
         var WPBlogsRaw = document.querySelectorAll("[data-wp-source]");
-        // Create some WPBlogs
+        // Step 2: Create some WPBlogs
         var i, j, el;
         for (i = 0; i < WPBlogsRaw.length; i += 1) {
             WPBlogs.push(rootElement(WPBlogsRaw[i]));
         }
-        // Create the wPElements
+        // Step 3: Create the wPElements
         WPBlogs.forEach(function (WPBlog) {
             for (j = 0; j < WPBlog.ElementsLength(); j += 1) {
                 el = wPElement(WPBlog.WPElements()[j], WPBlog.SourceURL());
@@ -234,19 +243,25 @@ var AstroWP = AstroWP || {};
             }
         });
         // Create Event 
-        // yty
+        // todoyty
     }
 
     function main() {
         init();
-        // Step 3: Render the wpElememts(fill in the content)
+        // Step 4: Render the wpElememts(fill in the content)
         renderContent(wPElements);
     }
 
-    main();
-    AstroWP= {
+    main(); // Execute astro magic
+
+    // the public properties, mainly use for unit test
+    AstroWP = {
         Root: rootElement,
         wpElement: wPElement
+    };
+    // append it into the global object 
+    if(!window.AstroWP) {
+        window.AstroWP = AstroWP;
     }
 }());
 
