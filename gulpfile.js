@@ -1,6 +1,6 @@
 var gulp = require('gulp');
 var jslint = require('gulp-jslint');
-var files = ['./*.js', 'src/*.js'];
+var files = ['src/*.js'];
 // build the main source into the min file
 gulp.task('lint', function () {
     'use strict';
