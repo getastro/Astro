@@ -49,6 +49,18 @@
         };
     }
 
+    /**
+     * wPElement
+     *
+     * @param wpElementNode
+     * @param sourceUrl
+     * @return {
+     *      requestUrl: {string}
+     *      layout: {string}
+     *      template:{Dom}
+     *      nodes:{Dom}
+     * }
+     */
     function wPElement(wpElementNode, sourceUrl) {
         var element, expectedType, dataset, templates;
         expectedType = ["posts", "categories"];
@@ -203,6 +215,8 @@
         }
         return data;
     }
+    
+    
 
     function renderContent (elements) {
         elements.forEach(function (element) {
