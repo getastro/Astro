@@ -15,16 +15,19 @@
 
 (function () {
     'use strict';
-    var AstroWP; // namespa
+    var AstroWP; // namespace
     var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
         wPElements = [];
 
-    function rootElement(rootNode) {
+    function rootElement(rootNode, id) {
         var root, elements;
         root = rootNode;
-    
+        if (root) {
+            root.setAttribute('id', "astro-wp-blog-" + id);
+        }
+         
         elements = root.querySelectorAll("[data-wp-element]");
-
+        
         function getSourceURL() {
             // check if the root url is end with / or not
             // otherwise append / at tail
@@ -61,13 +64,16 @@
      *      nodes:{Dom}
      * }
      */
-    function wPElement(wpElementNode, sourceUrl) {
+    function wPElement(wpElementNode, sourceUrl, id) {
         var element, expectedType, dataset, templates;
         expectedType = ["posts", "categories"];
         element = wpElementNode;
         dataset = element.dataset;
         templates = element.querySelectorAll('[data-wp-template]');
-
+        
+        if (element) {
+            element.setAttribute("id", "astro-wp-element-" + id);  
+        }
         function layout() {
             if (dataset.wpLayout) {
                 if (dataset.wpLayout.search(/list|single|slider/) !== -1) {
@@ -139,6 +145,7 @@
             // FIXME yty
             return templates;
         }
+
         // public properties
         return {
             requestUrl: requestUrl,
@@ -148,7 +155,7 @@
         };
     }
 
-
+    // the helper functions
     var util = {
         ajax: function (url, callback) {
             var xmlhttp;
@@ -189,34 +196,39 @@
         insertCollections: function (json, layout) {
             //
             // json = [{post}, {posts} ..] 
-            var list = layout.querySelector("*");
+            var list, templates, virtual;
+            list = layout.querySelector("*");
+            templates = layout.querySelectorAll("[data-wp-template]");
+            // assume the response json has "posts" property
             json.posts.forEach(function (post, index) {
                 if (index === 0) {
                     // this not need to clone
+                    // but we need to add the id here
+                    list.setAttribute("id", "astro-" + index);
                     util.insertContent(post, 
-                        layout.querySelectorAll("[data-wp-template]")); 
+                        templates); 
                 } else {// this need to clone 
-                    var virtual = list.cloneNode(true);
+                    virtual = list.cloneNode(true);
+                    virtual.setAttribute("id", "astro-" + index);
+                    console.log(virtual);
                     util.insertContent(post,
-                        virtual.querySelectorAll("[data-wp-template]")); 
+                        templates); 
                     layout.appendChild(virtual);
                 }
             });
+        },
+        filterData: function (data) {
+            // filter out a list of post and only return first post
+            if (data.posts) {
+                // FIXME yty
+                // should not return all post
+                // fix the request string to return only 1 post
+                return data.posts[0];
+            }
+            return data;
         }
-    };
 
-    function filterData(data) {
-        // filter out a list of post and only return first post
-        if (data.posts) {
-            // FIXME yty
-            // should not return all post
-            // fix the request string to return only 1 post
-            return data.posts[0];
-        }
-        return data;
-    }
-    
-    
+    };
 
     function renderContent (elements) {
         elements.forEach(function (element) {
@@ -228,12 +240,12 @@
                         util.insertCollections(data, element.nodes);
                         break;
                     case "single":
-                        data = filterData(data);
+                        data = util.filterData(data);
                         util.insertContent(data, element.template());
                         break;
                     default:
                         // assume data-wp-layout is not definded
-                        data = filterData(data);
+                        data = util.filterData(data);
                         util.insertContent(data, element.template());
                     }
                 }
@@ -247,15 +259,19 @@
         // Step 2: Create some WPBlogs
         var i, j, el;
         for (i = 0; i < WPBlogsRaw.length; i += 1) {
-            WPBlogs.push(rootElement(WPBlogsRaw[i]));
+            
+            WPBlogs.push(rootElement(WPBlogsRaw[i], i));
+
         }
         // Step 3: Create the wPElements
         WPBlogs.forEach(function (WPBlog) {
             for (j = 0; j < WPBlog.ElementsLength(); j += 1) {
-                el = wPElement(WPBlog.WPElements()[j], WPBlog.SourceURL());
+                el = wPElement(WPBlog.WPElements()[j], WPBlog.SourceURL(), j);
                 wPElements.push(el);
             }
         });
+
+        
         // Create Event 
         // todoyty
     }
@@ -271,7 +287,8 @@
     // the public properties, mainly use for unit test
     AstroWP = {
         Root: rootElement,
-        wpElement: wPElement
+        wpElement: wPElement,
+        util: util
     };
     // append it into the global object 
     if(!window.AstroWP) {
