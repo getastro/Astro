@@ -11,13 +11,30 @@
 // 1. Remove data-wp-collection attribute
 // 2. Combine collection to wp-element
 // 3. data-wp-layout is the require attribute
+// 4. An Astro event fire up when finish render
 //
+
+// custom event polyfill for IE9 - IE10
+(function () {
+    'use strict';
+    function CustomEvent (event, params) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent('CustomEvent');
+        evt.initCustomEvent(event, params.bubbles,
+                            params.cancelable, params.detail);
+        return evt;
+   };
+    CustomEvent.prototype = window.CustomEvent.prototype;
+    window.CustomEvent = CustomEvent;
+})();
+
 
 (function () {
     'use strict';
-    var AstroWP; // namespace
+    var AstroWP, astroWPEvent; // namespace
     var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
-        wPElements = [];
+        wPElements = [],
+        astroWPEvent = new CustomEvent("AstroWP-render"); // IE9 only
 
     function rootElement(rootNode, id) {
         var root, elements;
@@ -202,17 +219,17 @@
             // assume the response json has "posts" property
             json.posts.forEach(function (post, index) {
                 if (index === 0) {
-                    // this not need to clone
+                    // the existing template
                     // but we need to add the id here
-                    list.setAttribute("id", "astro-" + index);
+                    list.setAttribute("id", "astro-wp-" + index);
                     util.insertContent(post, 
                         templates); 
                 } else {// this need to clone 
+                    // the virtual node by cloning the templates
                     virtual = list.cloneNode(true);
-                    virtual.setAttribute("id", "astro-" + index);
-                    console.log(virtual);
+                    virtual.setAttribute("id", "astro-wp-" + index);
                     util.insertContent(post,
-                        templates); 
+                        virtual.querySelectorAll("[data-wp-template]")); 
                     layout.appendChild(virtual);
                 }
             });
@@ -238,10 +255,12 @@
                     switch (layout) {
                     case "list":
                         util.insertCollections(data, element.nodes);
+                        document.dispatchEvent(astroWPEvent);
                         break;
                     case "single":
                         data = util.filterData(data);
                         util.insertContent(data, element.template());
+                        document.dispatchEvent(astroWPEvent);
                         break;
                     default:
                         // assume data-wp-layout is not definded
@@ -270,12 +289,8 @@
                 wPElements.push(el);
             }
         });
-
-        
-        // Create Event 
-        // todoyty
     }
-
+    
     function main() {
         init();
         // Step 4: Render the wpElememts(fill in the content)
@@ -288,11 +303,13 @@
     AstroWP = {
         Root: rootElement,
         wpElement: wPElement,
-        util: util
+        util: util,
+        event: astroWPEvent
     };
     // append it into the global object 
     if(!window.AstroWP) {
         window.AstroWP = AstroWP;
     }
 }());
+
 

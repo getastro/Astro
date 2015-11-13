@@ -10,10 +10,9 @@
 <body>
     <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
         <!--Getting a post and id = 10 -->
-        <div data-wp-collection="posts">
-            <div data-wp-layout="list">
-                <div>
-                <h1 data-wp-template="title" data-toggle="collapse" data-target="h1 + div"></h1>
+       <div data-wp-element="posts" data-wp-layout="list" data-wp-options="number=3">
+            <div>
+                <h1 data-wp-template="title" data-toggle="collapse" data-target=" [data-wp-template=content]"></h1>
                 <div class="collapse" data-wp-template="content"></div>
                 </div>
             </div>
@@ -22,6 +21,15 @@
     </div>
 
 <script src="../src/astro-wp-element.js"></script>
-    
+<script>
+// IE 9 + only
+document.addEventListener('AstroWP-render', function (e) {
+   var nodes =document.querySelectorAll("[data-toggle]");
+         //node.dataset.target = node.parent.id        
+    for(var i = 0; i < nodes.length; i++) {
+        nodes[i].dataset.target = "#" + nodes[i].parentElement.id.concat(nodes[i].dataset.target);
+    };
+}); 
+</script> 
 </body>
 </html>
