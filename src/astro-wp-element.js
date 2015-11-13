@@ -1,7 +1,7 @@
 // Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: November 7th, 2015
+// Last updated: November 12th, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
