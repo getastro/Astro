@@ -11,7 +11,7 @@ gulp.task('lint', function () {
             for: true,
             white: true,
             predef: ["require", "console", "AstroWP", "RootElement",
-                    "ActiveXObject","WPElement", "util", "_"],
+                    "ActiveXObject","WPElement", "util", "_", "CustomEvent"],
             reporter: 'default'
         }))
         .on('error', function (error) {

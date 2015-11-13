@@ -23,18 +23,19 @@
         evt.initCustomEvent(event, params.bubbles,
                             params.cancelable, params.detail);
         return evt;
-   };
+    }
+    
     CustomEvent.prototype = window.CustomEvent.prototype;
     window.CustomEvent = CustomEvent;
-})();
+}());
 
 
 (function () {
     'use strict';
-    var AstroWP, astroWPEvent; // namespace
-    var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
-        wPElements = [],
-        astroWPEvent = new CustomEvent("AstroWP-render"); // IE9 only
+    var AstroWP, astroWPEvent, WPBlogs, wPElements; // namespace
+    WPBlogs = [];// this to store the HTML BLOCKS, each Item = contents from 1 blog
+    wPElements = [];
+    astroWPEvent = new CustomEvent("AstroWP-render"); // IE9 only
 
     function rootElement(rootNode, id) {
         var root, elements;
@@ -248,25 +249,26 @@
     };
 
     function renderContent (elements) {
-        elements.forEach(function (element) {
+        elements.forEach(function (element, index) {
             util.ajax(element.requestUrl(), function (err, data) {
                 if (!err) {
                     var layout = element.layout();
                     switch (layout) {
                     case "list":
-                        util.insertCollections(data, element.nodes);
-                        document.dispatchEvent(astroWPEvent);
                         break;
                     case "single":
                         data = util.filterData(data);
                         util.insertContent(data, element.template());
-                        document.dispatchEvent(astroWPEvent);
                         break;
                     default:
                         // assume data-wp-layout is not definded
                         data = util.filterData(data);
                         util.insertContent(data, element.template());
                     }
+                }
+                // check is the last
+                if (index === elements.length - 1) {
+                    document.dispatchEvent(astroWPEvent);
                 }
             });
         });
@@ -311,5 +313,3 @@
         window.AstroWP = AstroWP;
     }
 }());
-
-
