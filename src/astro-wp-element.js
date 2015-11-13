@@ -1,7 +1,7 @@
 // Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: November 12th, 2015
+// Last updated: November 7th, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -23,19 +23,18 @@
         evt.initCustomEvent(event, params.bubbles,
                             params.cancelable, params.detail);
         return evt;
-    }
-    
+   };
     CustomEvent.prototype = window.CustomEvent.prototype;
     window.CustomEvent = CustomEvent;
-}());
+})();
 
 
 (function () {
     'use strict';
-    var AstroWP, astroWPEvent, WPBlogs, wPElements; // namespace
-    WPBlogs = [];// this to store the HTML BLOCKS, each Item = contents from 1 blog
-    wPElements = [];
-    astroWPEvent = new CustomEvent("AstroWP-render"); // IE9 only
+    var AstroWP, astroWPEvent; // namespace
+    var WPBlogs = [], // this to store the HTML BLOCKS, each Item = contents from 1 blog
+        wPElements = [],
+        astroWPEvent = new CustomEvent("AstroWP-render"); // IE9 only
 
     function rootElement(rootNode, id) {
         var root, elements;
@@ -255,6 +254,7 @@
                     var layout = element.layout();
                     switch (layout) {
                     case "list":
+                        util.insertCollections(data, element.nodes);
                         break;
                     case "single":
                         data = util.filterData(data);
@@ -266,8 +266,7 @@
                         util.insertContent(data, element.template());
                     }
                 }
-                // check is the last
-                if (index === elements.length - 1) {
+                if(index === elements.length - 1) {
                     document.dispatchEvent(astroWPEvent);
                 }
             });
@@ -313,3 +312,5 @@
         window.AstroWP = AstroWP;
     }
 }());
+
+
