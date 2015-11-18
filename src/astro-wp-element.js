@@ -1,7 +1,7 @@
-// Astro Framework - WordPress v0.2.0
+// Astro Framework - WordPress v0.2.1
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: November 7th, 2015
+// Last updated: November 18th, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -93,7 +93,7 @@
         }
         function layout() {
             if (dataset.wpLayout) {
-                if (dataset.wpLayout.search(/list|single|slider/) !== -1) {
+                if (dataset.wpLayout.search(/list|single/) !== -1) {
                     return dataset.wpLayout;
                 }
             }
@@ -248,29 +248,35 @@
     };
 
     function renderContent (elements) {
-        elements.forEach(function (element, index) {
-            util.ajax(element.requestUrl(), function (err, data) {
-                if (!err) {
-                    var layout = element.layout();
-                    switch (layout) {
-                    case "list":
-                        util.insertCollections(data, element.nodes);
-                        break;
-                    case "single":
-                        data = util.filterData(data);
-                        util.insertContent(data, element.template());
-                        break;
-                    default:
-                        // assume data-wp-layout is not definded
-                        data = util.filterData(data);
-                        util.insertContent(data, element.template());
-                    }
-                }
-                if(index === elements.length - 1) {
-                    document.dispatchEvent(astroWPEvent);
-                }
-            });
-        });
+       var element;
+       var counter = 0; // need to use for track when all ajax call are finished
+       for (var i = 0; i < elements.length; i=i+1) {
+           element = elements[i];
+           // need to use closure to process the current element
+           (function (element) {
+               util.ajax(element.requestUrl(), function (err, data) {
+                   if (!err) {
+                       var layout = element.layout();
+                       switch (layout) {
+                       case "list":
+                           util.insertCollections(data, element.nodes);
+                           break;
+                       case "single":
+                           data = util.filterData(data);
+                           util.insertContent(data, element.template());
+                           break;
+                       default:
+                           // assume data-wp-layout is not definded
+                           data = util.filterData(data);
+                           util.insertContent(data, element.template());
+                       }
+                   }
+                   if(++counter === elements.length) {
+                       document.dispatchEvent(astroWPEvent);
+                   }
+               });
+           })(element);
+        }
     }
     
     function init() {
