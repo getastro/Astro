@@ -1,7 +1,7 @@
-// Astro Framework - WordPress v0.2.2
+// Astro Framework - WordPress v0.2.0
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: December 26nd, 2015
+// Last updated: December 30nd, 2015
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -15,7 +15,7 @@
 //
 
 // custom event polyfill for IE9 - IE10
-(function () {
+(function (document, window) {
     'use strict';
     function CustomEvent (event, params) {
         params = params || { bubbles: false, cancelable: false, detail: undefined };
@@ -26,7 +26,7 @@
     }
     CustomEvent.prototype = window.CustomEvent.prototype;
     window.CustomEvent = CustomEvent;
-})();
+})(document, window);
 
 (function (document, window) {
     'use strict';
@@ -168,15 +168,13 @@
 
         function layout  () {
             if (!dataset[ASTRO_DATASET_ATTRIBUTE.layout]) {
-                console.error("Astro Error: " + ERROR_MESSAGE.layout);
-                return;
+                return 'single';
             }
             if (dataset[ASTRO_DATASET_ATTRIBUTE.layout].search(LAYOUT_TYPE) !== -1) {
                 return dataset[ASTRO_DATASET_ATTRIBUTE.layout];
             } 
 
-            return 'single'; //if layout is not defined, we assume it means render single item
-
+                 //if layout is not defined, we assume it means render single item
         }
 
 
@@ -228,7 +226,22 @@
         };
     } 
 
+    /**
+     * getElementAmt
+     * @summary This will return the # of ajax call is needed
+     *          for aync in Fetch(), need to dispatch an event
+     *          after all ajax call 
+     *
+     * @param {object} element AstroWP
+     */
+    function getElementAmt(element) {
+        var counter = 0;
 
+        for (var i = 0; i < element.wpElements.blogs.length; i++) {
+            counter += element.wpElements.blogs[i].elements.length;
+        }
+        return counter;
+    }
     /**
      * Init
      * @summary Gather the nessesery information from the nodes
@@ -257,8 +270,9 @@
      */
     function Fetch(callback) {
         // build element requirement 
-        var counter = 0; // need to use for track when all ajax call are finished
+        var elCounter = 0; // need to use for track when all ajax call are finished
         var i, e;
+        var elAmt = getElementAmt(AstroWP);
         AstroWP.wpElements.blogs.forEach(function(bg) {
             for (i = 0; i < bg.elements.length; i+=1) {
                 e = Element(bg.url, bg.elements[i]);
@@ -269,17 +283,23 @@
                         if (err) {
                             callback(e, data);
                         }
-                        bg.jsoncontent.push(data.posts);
+                        if (!data.posts) {
+                            bg.jsoncontent.push([data]);
+                        } else {
+                            bg.jsoncontent.push(data.posts);
+                        }
                         // sorry for the messy code                       
                         // promises is not fully compatible in every browswer
                         // this nessed code is ugly, but...
                         // this will be rewrite soon
                         // Todoyty
                         callback(e, data); // i know, this block of code smell
-                        counter += 1;
-                        if(counter === bg.elements.length) {
+                        elCounter += 1;
+                        if(elCounter === elAmt) {
+                              //fixmeyty
                             // fire up event 
                             document.dispatchEvent(event_FinishRequest);
+                            
                         }
                     });
                 })(e, bg);
@@ -384,6 +404,8 @@
     AstroWP.Util = Util;
     // put this to public
     window.AstroWP = AstroWP;
+    window.ASTRO_QUERY_DATASET = ASTRO_QUERY_DATASET;
+    window.ASTRO_DATASET_ATTRIBUTE = ASTRO_DATASET_ATTRIBUTE;
 
 
 }(document, window));
