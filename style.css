@@ -1,0 +1,69 @@
+/* Move down content because we have a fixed navbar that is 50px tall. */
+body {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: none;
+}
+.navbar-inverse {
+	box-shadow: none !important;
+	border-bottom: 0;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1a0766+0,660762+100 */
+	background: #1a0766; /* Old browsers */
+	background: -moz-linear-gradient(left,  #1a0766 0%, #660762 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  #1a0766 0%,#660762 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  #1a0766 0%,#660762 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a0766', endColorstr='#660762',GradientType=1 ); /* IE6-9 */
+}
+.logo-astro {
+    float: left;
+    width: 100px;
+    height: 50px;
+    background: url(https://getcontentfrom.files.wordpress.com/2015/10/logo-astro-small2.png) center no-repeat;
+    text-indent: -999px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-size: 0;
+    line-height: 0;
+    opacity: 0.85;
+}
+.jumbotron {
+	color: #fff;
+	background-image:url(https://getcontentfrom.files.wordpress.com/2015/10/iss044e0455421.jpg);
+	background-size:cover;
+	position:relative;
+}
+.footer {
+  color: #fff;
+  background-image:url(https://getcontentfrom.files.wordpress.com/2015/10/iss044e095609.jpg);
+  background-size:cover;
+  position:relative;
+}
+/* responsive iframe */
+.flex-video {
+	position: relative;
+	padding-top: 25px;
+	padding-bottom: 67.5%;
+	height: 0;
+	overflow: hidden;
+}
+.flex-video.widescreen { 
+	padding-bottom: 57.25%;
+}
+.flex-video.vimeo { 
+	padding-top: 0;
+}
+.flex-video iframe,
+.flex-video object,
+.flex-video embed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+@media only screen and (max-device-width: 800px), only screen and (device-width: 1024px) and (device-height: 600px), only screen and (width: 1280px) and (orientation: landscape), only screen and (device-width: 800px), only screen and (max-width: 767px) {
+	.flex-video { 
+		padding-top: 0;
+	}
+}
