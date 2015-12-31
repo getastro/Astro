@@ -27,6 +27,10 @@ body {
     line-height: 0;
     opacity: 0.85;
 }
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
 .jumbotron {
 	color: #fff;
 	background-image:url(https://getcontentfrom.files.wordpress.com/2015/10/iss044e0455421.jpg);
