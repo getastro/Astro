@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div astro-body> <!--This is a must container-->
+        <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
+            <div data-wp-element="posts" data-wp-options="category=demo&number=2" data-wp-layout="list"
+                data-app-view="singlepage-1"> <!--This div will be hidden if the h1 got triggered-->
+                <div>
+                    <a data-wp-template="URL"><h1 data-wp-template="title"></h1></a><!--This will be the trigger-->
+                </div>
+            </div>
+            <div data-wp-element="posts/slug:matt-mullenweg-wordpress-automattic-at-startup-grind-new-york-city/" data-app-view="singlepage">
+                <a data-wp-template="URL"><h1 data-wp-template="title"></h1></a><!--This will be the trigger-->
+            </div>
+        </div> 
+    </div>
+
+    <!--The template for the single view, this will be overlay if the h1 got triggered --> 
+    <div data-app-view="singlepage">
+        <div data-wp-template="date"></div>
+        <div data-wp-template="content"></div> 
+    </div>  
+    <div data-app-view="singlepage-1">
+        <img data-wp-template="featured_image"></img>
+    </div>
+<script src="../src/astro-wp-element.js"></script>
+<script src="../src/astro-support-views.js"></script>
+</body>
+</html>
