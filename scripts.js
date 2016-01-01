@@ -7,7 +7,7 @@
 		});
 		
 		$('.bxslider').bxSlider({
-		  minSlides: 2,
+		  minSlides: 1,
 		  maxSlides: 7,
 		  slideWidth: 220,
 		  slideMargin: 10
