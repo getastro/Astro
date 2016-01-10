@@ -3,9 +3,9 @@ Astro
 
 [![Join the chat at https://gitter.im/Ting-y/Astro](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Ting-y/Astro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A JS library framework to render JSON content, regardless skill level.
+A JavaScript framework to render JSON content, regardless skill level.
 
-Astro is a JS library framework to fetch JSON in a simple way. Using only data attributes in the HTML markup, it renders publicly available JSON content that does not require authentication from WordPress.com or WordPress.org websites using Jetpack‘s RESTful JSON API. See it in action: (Github URL).
+Astro is a JavaScript framework to fetch JSON in a simple way. Using only data attributes in the HTML markup, it renders publicly available JSON content that does not require authentication from WordPress.com or WordPress.org websites using Jetpack‘s RESTful JSON API. See it in action: [Astro home page](http://ting-y.github.io/Astro).
 
 **Hightlights:**
 * Fetch from a single API source or from multiple API sources in the same document
