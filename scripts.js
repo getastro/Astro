@@ -6,6 +6,10 @@
 			$('body').fadeIn(500);
 		});
 		
+		// Add responsive class to iframes
+		$("iframe, embed, object").wrap("<div class='flex-video widescreen'/>");
+		
+		// Add slider options
 		$('.bxslider').bxSlider({
 		  minSlides: 1,
 		  maxSlides: 7,
