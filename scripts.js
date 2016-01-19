@@ -7,7 +7,9 @@
 		});
 		
 		// Add responsive class to iframes
-		$("iframe, embed, object").wrap("<div class='flex-video widescreen'/>");
+		// Add responsive class to iframes
+		$("iframe, embed, object").wrap("<div class='embed-responsive embed-responsive-16by9'/>");
+		$("iframe, embed, object, video").addClass('embed-responsive-item');
 		
 		// Add slider options
 		$('.bxslider').bxSlider({
