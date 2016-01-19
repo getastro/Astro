@@ -7,16 +7,16 @@
 		});
 		
 		// Add responsive class to iframes
-		// Add responsive class to iframes
 		$("iframe, embed, object").wrap("<div class='embed-responsive embed-responsive-16by9'/>");
 		$("iframe, embed, object, video").addClass('embed-responsive-item');
 		
 		// Add slider options
 		$('.bxslider').bxSlider({
-		  minSlides: 1,
+		  minSlides: 2,
 		  maxSlides: 7,
 		  slideWidth: 220,
-		  slideMargin: 10
+		  slideMargin: 10,
+		  controls: false
 		});
 		
     });
