@@ -10,6 +10,11 @@
 		$("iframe, embed, object").wrap("<div class='embed-responsive embed-responsive-16by9'/>");
 		$("iframe, embed, object, video").addClass('embed-responsive-item');
 		
+		// Optimized images
+		$('.img-thumbnail').attr("src", function(i, src) {
+		  return src + '?w=50';
+		});
+		
 		// Add slider options
 		$('.bxslider').bxSlider({
 		  minSlides: 2,
