@@ -1,17 +1,14 @@
-// Astro Framework - WordPress v0.2.0
+// Astro Framework - WordPress v0.2.1
 // Copyright 2015 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: December 30nd, 2015
+// Last updated: January 31st, 2016 
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
 //  WordPress.org (self hosted) with Jetpack json-api plugin 
 //  
 // Highlights:
-// 1. Remove data-wp-collection attribute
-// 2. Combine collection to wp-element
-// 3. An Astro event fire up when finish render
-// 4. rewritten the library and supports cache json content
+// 1. support rendering nested properties in json content
 //
 
 // custom event polyfill for IE9 - IE10
@@ -104,6 +101,19 @@
             };
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
+        },
+        GetTemplateProperty: function (param, json) {
+            var p = param;
+            var keys = p.split(".");
+            
+            console.log(keys);
+            for (var i = 0; i < keys.length; i+=1) {
+                json = json[keys[i]];
+                
+            }
+
+            return json;
+
         }
     };
 
@@ -190,7 +200,7 @@
         
         function requestURL () {
             var path = '';
-                
+            var opts = options();    
             // apend a / to URL
             if (sourceURL.slice(-1) !==  "/") {
                 sourceURL= sourceURL + "/";
@@ -198,8 +208,8 @@
             
             path += sourceURL + endPoint();
             
-            if (options) {
-                path += '?' + options(); 
+            if (opts !== null) {
+                path += '?' + opts; 
             }
             return path;
         }
@@ -369,16 +379,17 @@
      * @param {nodelist} template The nodes that contains [data-wp-template]
      */
     function RenderSinglePost(json, template) {
-        var i;
+        var i, content;
             for ( i = 0; i < template.length; i += 1) {
+                content = Util.GetTemplateProperty(template[i].dataset.wpTemplate, json);
                 if (template[i].tagName === "IMG") {
                     template[i].setAttribute("src",
-                        json[template[i].dataset.wpTemplate]);
+                        content);
                 } else if (template[i].tagName === "A") {
                     template[i].setAttribute("href",
-                        json[template[i].dataset.wpTemplate]);
+                       content);
                 } else {
-                    template[i].innerHTML = json[template[i].dataset.wpTemplate];
+                    template[i].innerHTML = content;
                 }
             }
     }
