@@ -5,6 +5,16 @@
     <title></title>
 </head>
 <body>
+    <div data-wp-source="http://159.203.14.187">
+        <div data-wp-element="wp-json/wp/v2/posts" data-wp-layout="list">
+            <div>
+                <h1 data-wp-template="title.rendered"></h1>
+                <!--To display featured_image will require to have Better REST API Featured Images plugin
+                 https://github.com/BraadMartin/better-rest-api-featured-images -->
+                <img data-wp-template="better_featured_image.media_details.sizes.thumbnail.source_url"></img>
+            </div>
+        </div>
+    </div>
     <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/" >
         <div data-wp-element="posts" data-wp-options="category=demo&number=2" data-wp-layout="list">
             <div>

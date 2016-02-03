@@ -1,7 +1,7 @@
 // Astro Framework - WordPress v0.2.1
-// Copyright 2015 Ting Yang and Hector Jarquin
+// Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: January 31st, 2016 
+// Last updated: Feburary 3rd, 2016 
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -102,7 +102,7 @@
             xmlhttp.open("GET", url, true);
             xmlhttp.send();
         },
-        GetTemplateProperty: function (param, json) {
+        ExtractJsonValueByKey: function (param, json) {
             var p = param;
             var keys = p.split(".");
             
@@ -293,6 +293,9 @@
                         if (err) {
                             callback(e, data);
                         }
+                        if (Array.isArray(data)) {
+                            bg.jsoncontent.push([data]);
+                        }
                         if (!data.posts) {
                             bg.jsoncontent.push([data]);
                         } else {
@@ -330,12 +333,13 @@
             // copy the nodes
             var nodes = element.childnodes();
             var i, virtual;
-            for (i = 1; i < jsonContent.posts.length; i+= 1) {
+            var posts = jsonContent.posts || jsonContent;
+            for (i = 1; i < posts.length; i+= 1) {
                 virtual = nodes.cloneNode(true);
                 element.elementNode().appendChild(virtual);
             }
         }
-        Render(element, jsonContent);
+        Render(element, posts);
     }
     /**
      * Render
@@ -346,7 +350,7 @@
      */
     function Render(element, json) {
         var nodes, templates;
-        if (json.posts) {
+        if (Array.isArray(json)) {
             RenderList(element, json);
         } else {
             nodes = element.elementNode(); 
@@ -355,20 +359,23 @@
         }
     }
 
-    /**
+    /** yty
      * RenderList
      *
      * @param {object} element instance of Element
      * @param {json object} json json objects that received from wordpress
      */
-    function RenderList(element, json) {
+    function RenderList(element, posts) {
         var nodes, i, templates;
-        for (i = 0; i < json.posts.length; i+= 1) {
+        // if the json with .posts is from .com
+        // if the json type is array, its from .org
+        //var posts = json.posts || json;
+        for (i = 0; i < posts.length; i+= 1) {
             // assign the coresponse html to the post json
             nodes = element.elementNode().children[i]; 
             templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.template);
             // this will insert the json to html inner html
-            RenderSinglePost(json.posts[i], templates);
+            RenderSinglePost(posts[i], templates);
         }
     }
 
@@ -381,7 +388,7 @@
     function RenderSinglePost(json, template) {
         var i, content;
             for ( i = 0; i < template.length; i += 1) {
-                content = Util.GetTemplateProperty(template[i].dataset.wpTemplate, json);
+                content = Util.ExtractJsonValueByKey(template[i].dataset.wpTemplate, json);
                 if (template[i].tagName === "IMG") {
                     template[i].setAttribute("src",
                         content);
