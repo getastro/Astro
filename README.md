@@ -62,7 +62,6 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 ###Todo:
 - More Unit tests
-- Support other REST API plugin (WP-API, Json API) 
 - Accessibility
 
 ###Reference:
