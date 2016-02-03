@@ -5,7 +5,8 @@
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
-//  WordPress.org (self hosted) with Jetpack json-api plugin 
+//  WordPress.org (self hosted) with Jetpack json-api plugin and WP API
+//  
 //  
 // Highlights:
 // 1. support rendering nested properties in json content

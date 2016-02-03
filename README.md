@@ -5,7 +5,7 @@ Astro
 
 A JavaScript framework to render JSON content, regardless skill level.
 
-Astro renders JSON in a simple way. Using only data attributes in the HTML markup, renders publicly available JSON content that does not require authentication from WordPress.com or WordPress.org websites using Jetpack's REST JSON API. See it in action: [Astro home page](http://ting-y.github.io/Astro).
+Astro renders JSON in a simple way. Using only data attributes in the HTML markup, renders publicly available JSON content that does not require authentication from WordPress.com or WordPress.org websites using Jetpack's REST JSON API or WP-API Version 2.0. See it in action: [Astro home page](http://ting-y.github.io/Astro).
 
 
 **Hightlights:**
@@ -56,7 +56,8 @@ Include astro file inside body tag and before any Javascript execuetion block
 ###Support:
 
 -  blog on wordpress.com
--  self hosted(wordpress.org) with jetpack json-api plugin enable
+-  self hosted(wordpress.org) with jetpack json-api plugin enabled
+-  self hosted(wordpress.org) with WP-API version 2 enabled
 
 
 ###Todo:
@@ -67,6 +68,8 @@ Include astro file inside body tag and before any Javascript execuetion block
 ###Reference:
 WordPress official RESTful API endpoint
 [Documentaion](https://developer.wordpress.com/docs/api/)
+WP-API Version 2.0 endpoint
+[Documentaion](http://v2.wp-api.org/)
 
 ###Questions:
 If you have any questions about Astro, please [create a new issue](https://github.com/Ting-y/Astro/issues) or Email [Ting](mailto:ting.yatingyang@gmail.com)
