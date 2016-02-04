@@ -61,7 +61,7 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 
 ###Todo:
-- More Unit tests
+- Fix Unit tests
 - Accessibility
 
 ###Reference:
