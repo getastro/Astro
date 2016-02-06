@@ -38,20 +38,20 @@
 
     // Astro defined attribute name
     var ASTRO_QUERY_DATASET = {
-        source: "[data-wp-source]",
-        element: "[data-wp-element]",
-        template: "[data-wp-template]"
+        host: "[data-api-host]",
+        endpoint: "[data-api-endpoint]",
+        property: "[data-api-property]"
     };
 
     var ASTRO_DATASET_ATTRIBUTE = {
-        source: 'wpSource',
-        element: 'wpElement',
-        options: 'wpOptions',
-        layout: 'wpLayout',
+        host: 'apiHost',
+        endpoint: 'apiEndpoint',
+        parameters: 'apiParameters',
+        template: 'apiTemplate',
         singlePage: 'partialView' // will be use in other
     };
     
-    var LAYOUT_TYPE = /list|single/;
+    var LAYOUT_TYPE = /repeat|single/;
     
     var ERROR_MESSAGE = {
         layout: "Not valid layout type, the program will set the layout to Single"
@@ -107,7 +107,6 @@
             var p = param;
             var keys = p.split(".");
             
-            console.log(keys);
             for (var i = 0; i < keys.length; i+=1) {
                 json = json[keys[i]];
                 
@@ -121,11 +120,11 @@
     /**
      * getBlogs
      *
-     * @return {NodeList} return nodes that contains [data-wp-source] attributes
+     * @return {NodeList} return nodes that contains [data-api-host] attributes
      */
     function getBlogs () {
         var wpBlogs;
-        wpBlogs = document.querySelectorAll(ASTRO_QUERY_DATASET.source);
+        wpBlogs = document.querySelectorAll(ASTRO_QUERY_DATASET.host);
         return wpBlogs || [];
     } 
     
@@ -134,7 +133,7 @@
     /**
      * getElements
      *
-     * @param {nodeList} blogs All nodes that contains [data-wp-source] attribute
+     * @param {nodeList} blogs All nodes that contains [data-api-host] attribute
      * @return {object} new custom object, see line 66
      */
     function getElements (blogs) {
@@ -145,8 +144,8 @@
         for (i = 0; i < blogs.length; i+=1) {
             elements.blogs.push(
                 {
-                    'url': blogs[i].dataset[ASTRO_DATASET_ATTRIBUTE.source],
-                    'elements': blogs[i].querySelectorAll(ASTRO_QUERY_DATASET.element),
+                    'url': blogs[i].dataset[ASTRO_DATASET_ATTRIBUTE.host],
+                    'elements': blogs[i].querySelectorAll(ASTRO_QUERY_DATASET.endpoint),
                     'jsoncontent': []
                 }        
             );
@@ -178,11 +177,11 @@
         var dataset = rawElement.dataset; 
 
         function layout  () {
-            if (!dataset[ASTRO_DATASET_ATTRIBUTE.layout]) {
+            if (!dataset[ASTRO_DATASET_ATTRIBUTE.template]) {
                 return 'single';
             }
-            if (dataset[ASTRO_DATASET_ATTRIBUTE.layout].search(LAYOUT_TYPE) !== -1) {
-                return dataset[ASTRO_DATASET_ATTRIBUTE.layout];
+            if (dataset[ASTRO_DATASET_ATTRIBUTE.template].search(LAYOUT_TYPE) !== -1) {
+                return dataset[ASTRO_DATASET_ATTRIBUTE.template];
             } 
 
                  //if layout is not defined, we assume it means render single item
@@ -190,12 +189,12 @@
 
 
         function options() {
-            var optionAttribute = dataset[ASTRO_DATASET_ATTRIBUTE.options] || null;
+            var optionAttribute = dataset[ASTRO_DATASET_ATTRIBUTE.parameters] || null;
             return optionAttribute;
         }
 
         function endPoint() {
-            var type = dataset[ASTRO_DATASET_ATTRIBUTE.element] || null;
+        var type = dataset[ASTRO_DATASET_ATTRIBUTE.endpoint] || null;
             return type;
         }
         
@@ -225,7 +224,7 @@
         }
 
         function templates () {
-            return rawElement.querySelectorAll(ASTRO_QUERY_DATASET.template);
+            return rawElement.querySelectorAll(ASTRO_QUERY_DATASET.property);
         }
         return {
             // public function
@@ -330,7 +329,7 @@
      * @param {json} jsonContent content that receive from wordpress
      */
     function Build(element, jsonContent) {
-        if (element.layout() === 'list') {
+        if (element.layout() === 'repeat') {
             // copy the nodes
             var nodes = element.childnodes();
             var i, virtual;
@@ -355,7 +354,7 @@
             RenderList(element, json);
         } else {
             nodes = element.elementNode(); 
-            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.template);
+            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
             RenderSinglePost(json, templates);
         }
     }
@@ -374,7 +373,7 @@
         for (i = 0; i < posts.length; i+= 1) {
             // assign the coresponse html to the post json
             nodes = element.elementNode().children[i]; 
-            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.template);
+            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
             // this will insert the json to html inner html
             RenderSinglePost(posts[i], templates);
         }
@@ -389,7 +388,7 @@
     function RenderSinglePost(json, template) {
         var i, content;
             for ( i = 0; i < template.length; i += 1) {
-                content = Util.ExtractJsonValueByKey(template[i].dataset.wpTemplate, json);
+                content = Util.ExtractJsonValueByKey(template[i].dataset.apiProperty, json);
                 if (template[i].tagName === "IMG") {
                     template[i].setAttribute("src",
                         content);
