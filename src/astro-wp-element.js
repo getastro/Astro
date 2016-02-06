@@ -1,7 +1,7 @@
-// Astro Framework - WordPress v0.2.1
+// Astro Framework - WordPress v0.3.0
 // Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: Feburary 3rd, 2016 
+// Last updated: Feburary 6th, 2016 
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -34,7 +34,7 @@
      * Define the "const" variables
      *
      */
-    var event_FinishRequest = new CustomEvent("AstroWP-render");
+    var event_FinishRequest = new CustomEvent("AstroAPI-render");
 
     // Astro defined attribute name
     var ASTRO_QUERY_DATASET = {
@@ -51,7 +51,7 @@
         singlePage: 'partialView' // will be use in other
     };
     
-    var LAYOUT_TYPE = /repeat|single/;
+    var TEMPLATE_TYPE = /repeat|single/;
     
     var ERROR_MESSAGE = {
         layout: "Not valid layout type, the program will set the layout to Single"
@@ -60,20 +60,18 @@
     /**
      * The global value that will insert into window object
      *  {
-     *      wpElements: {
-     *          blogs: [
+     *      apiElements: [
      *              {
      *                  element: [] <- NodeList
      *                  url: string <- the blog url
      *                  jsoncontent: [] <- the posts
      *              }
-     *          ]
-     *      }
+     *      ]
      *  }
      *
      */
 
-    var AstroWP = {};
+    var AstroAPI = {};
     /**
      * Util object contains helper functions 
      *
@@ -136,21 +134,20 @@
      * @param {nodeList} blogs All nodes that contains [data-api-host] attribute
      * @return {object} new custom object, see line 66
      */
-    function getElements (blogs) {
-        var elements = { 
-            blogs: []
-        };
+    function getElements (apiHosts) {
+        var apiElements = [];
+        
         var i;
-        for (i = 0; i < blogs.length; i+=1) {
-            elements.blogs.push(
+        for (i = 0; i < apiHosts.length; i+=1) {
+            apiElements.push(
                 {
-                    'url': blogs[i].dataset[ASTRO_DATASET_ATTRIBUTE.host],
-                    'elements': blogs[i].querySelectorAll(ASTRO_QUERY_DATASET.endpoint),
+                    'url': apiHosts[i].dataset[ASTRO_DATASET_ATTRIBUTE.host],
+                    'domElements': apiHosts[i].querySelectorAll(ASTRO_QUERY_DATASET.endpoint),
                     'jsoncontent': []
                 }        
             );
         }
-        return elements;
+        return apiElements;
     }
     
  
@@ -161,13 +158,13 @@
      * Element
      *
      * @param {string} url the blog URL from wordpress
-     * @param {dom element} rawElement The dom element that has [data-wp-element] attribute
+     * @param {dom element} rawElement The dom element that has [data-api-endpoint] attribute
      * @return {{
      *      url The request url
      *      layout What layout going to build for this element
      *      childNode The child nodes
      *      elementNode The current element node
-     *      template The childNodes that contains [data-wp-template] attribute
+     *      template The childNodes that contains [data-api-property] attribute
      * }} some public functions
      */
     function Element (url, rawElement) {
@@ -180,7 +177,7 @@
             if (!dataset[ASTRO_DATASET_ATTRIBUTE.template]) {
                 return 'single';
             }
-            if (dataset[ASTRO_DATASET_ATTRIBUTE.template].search(LAYOUT_TYPE) !== -1) {
+            if (dataset[ASTRO_DATASET_ATTRIBUTE.template].search(TEMPLATE_TYPE) !== -1) {
                 return dataset[ASTRO_DATASET_ATTRIBUTE.template];
             } 
 
@@ -242,13 +239,13 @@
      *          for aync in Fetch(), need to dispatch an event
      *          after all ajax call 
      *
-     * @param {object} element AstroWP
+     * @param {object} element AstroAPI
      */
     function getElementAmt(element) {
         var counter = 0;
 
-        for (var i = 0; i < element.wpElements.blogs.length; i++) {
-            counter += element.wpElements.blogs[i].elements.length;
+        for (var i = 0; i < element.apiElements.length; i++) {
+            counter += element.apiElements[i].domElements.length;
         }
         return counter;
     }
@@ -265,16 +262,16 @@
         // find Blogs
         var blogs = getBlogs();
         var elements = getElements(blogs);
-        AstroWP.wpElements = elements;
+        AstroAPI.apiElements = elements;
     }
 
 
     /**
      * Fetch
      * @summary A step after Init(), once it got called, it will
-     *          loop throught AstroWP.wpElement.blogs and do the ajax call
-     *          for each wp-element, then it will cache the json content to
-     *          AstroWP.wpElement.blogs.jsoncontent
+     *          loop throught AstroAPI.apiElement and do the ajax call
+     *          for each api-element, then it will cache the json content to
+     *          AstroAPI.apiElement.jsoncontent
      *
      * @param {function} callback Build the dom tree after retrive the json content from wordpress
      */
@@ -282,24 +279,24 @@
         // build element requirement 
         var elCounter = 0; // need to use for track when all ajax call are finished
         var i, e;
-        var elAmt = getElementAmt(AstroWP);
-        AstroWP.wpElements.blogs.forEach(function(bg) {
-            for (i = 0; i < bg.elements.length; i+=1) {
-                e = Element(bg.url, bg.elements[i]);
+        var elAmt = getElementAmt(AstroAPI);
+        AstroAPI.apiElements.forEach(function(apiElement) {
+            for (i = 0; i < apiElement.domElements.length; i+=1) {
+                e = Element(apiElement.url, apiElement.domElements[i]);
                 // closure
-                (function (e, bg) {
+                (function (e, apiElement) {
                     Util.GetContentFromWordpress(e.url(), function (err, data) {
                         // cache the content
                         if (err) {
                             callback(e, data);
                         }
                         if (Array.isArray(data)) {
-                            bg.jsoncontent.push([data]);
+                            apiElement.jsoncontent.push([data]);
                         }
                         if (!data.posts) {
-                            bg.jsoncontent.push([data]);
+                            apiElement.jsoncontent.push([data]);
                         } else {
-                            bg.jsoncontent.push(data.posts);
+                            apiElement.jsoncontent.push(data.posts);
                         }
                         // sorry for the messy code                       
                         // promises is not fully compatible in every browswer
@@ -315,7 +312,7 @@
                             
                         }
                     });
-                })(e, bg);
+                })(e, apiElement);
             }
         });
     }
@@ -323,7 +320,7 @@
     /**
      * Build
      * @summary a callback for Fetch(), it will build the html if the
-     *          wp element layout is list
+     *          api element layout is list
      *
      * @param {object} element an instance of Element
      * @param {json} jsonContent content that receive from wordpress
@@ -383,7 +380,7 @@
      * RenderSinglePost
      *
      * @param {json object} json post json object
-     * @param {nodelist} template The nodes that contains [data-wp-template]
+     * @param {nodelist} template The nodes that contains [data-api-property]
      */
     function RenderSinglePost(json, template) {
         var i, content;
@@ -419,9 +416,9 @@
      *
      */
     // for other other usage
-    AstroWP.Util = Util;
+    AstroAPI.Util = Util;
     // put this to public
-    window.AstroWP = AstroWP;
+    window.AstroAPI = AstroAPI;
     window.ASTRO_QUERY_DATASET = ASTRO_QUERY_DATASET;
     window.ASTRO_DATASET_ATTRIBUTE = ASTRO_DATASET_ATTRIBUTE;
 
