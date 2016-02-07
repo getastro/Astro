@@ -45,11 +45,11 @@ Include astro file inside body tag and before any Javascript execuetion block
 
 | Data Attribute      | Required |Description                            |
 |---------------------|----------|---------------------------------------|
-| data-wp-source      | Yes      | To identify the content source
-| data-wp-element     | Yes      | Magic is is happening within this block |
-| data-wp-template    | Yes      | The return field you want to display|
-| data-wp-options     | When using query parameter     | RESTful API qury parameters            |
-| data-wp-layout      | When displaying collection     | This is required if rendering multiple posts |
+| data-api-host       | Yes      | To identify the content source
+| data-api-endpoint   | Yes      | end point from API |
+| data-api-property   | Yes      | The return field you want to display|
+| data-api-parameters | When using query parameter     | RESTful API qury parameters            |
+| data-api-template   | When displaying collection     | This is required if rendering multiple posts |
 
 [Data attributes usage detail & example](https://github.com/Ting-y/Astro/wiki/Data-attributes-usage-and-explanation)
 
