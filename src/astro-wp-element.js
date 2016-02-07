@@ -1,16 +1,13 @@
 // Astro Framework - WordPress v0.3.0
 // Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: Feburary 6th, 2016 
+// Last updated: Feburary 7th, 2016 
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
 //  WordPress.org (self hosted) with Jetpack json-api plugin and WP API
 //  
 //  
-// Highlights:
-// 1. support rendering nested properties in json content
-//
 
 // custom event polyfill for IE9 - IE10
 (function (document, window) {
@@ -54,7 +51,7 @@
     var TEMPLATE_TYPE = /repeat|single/;
     
     var ERROR_MESSAGE = {
-        layout: "Not valid layout type, the program will set the layout to Single"
+        template: "Not valid template type, the program will set the template to Single"
     };
 
     /**
@@ -161,10 +158,11 @@
      * @param {dom element} rawElement The dom element that has [data-api-endpoint] attribute
      * @return {{
      *      url The request url
-     *      layout What layout going to build for this element
+     *      template What template going to build for this element
      *      childNode The child nodes
+     *		endPoint The endpoint of the request
      *      elementNode The current element node
-     *      template The childNodes that contains [data-api-property] attribute
+     *      properties The childNodes that contains [data-api-property] attribute
      * }} some public functions
      */
     function Element (url, rawElement) {
@@ -172,8 +170,6 @@
         var sourceURL = url;
                 
         var dataset = rawElement.dataset; 
-		
-		
 		
 		function elementType () {
 			var elementType;
@@ -185,7 +181,7 @@
 			return elementType;
 		}
 		
-        function layout  () {
+        function template  () {
             if (!dataset[ASTRO_DATASET_ATTRIBUTE.template]) {
                 return 'single';
             }
@@ -193,7 +189,7 @@
                 return dataset[ASTRO_DATASET_ATTRIBUTE.template];
             } 
 
-            //if layout is not defined, we assume it means render single item
+            //if template is not defined, we assume it means render single item
         }
 
 
@@ -232,16 +228,17 @@
             return rawElement;
         }
 
-        function templates () {
+        function properties () {
             return rawElement.querySelectorAll(ASTRO_QUERY_DATASET.property);
         }
         return {
             // public function
             url : requestURL,
-            layout: layout,
+            template: template,
+            endPoint: endPoint,
             childnodes: childnodes,
             elementNode: parentNode,
-            templates: templates,
+            properties: properties,
             elementType: elementType
         };
     } 
@@ -330,18 +327,20 @@
     /**
      * Build
      * @summary a callback for Fetch(), it will build the html if the
-     *          api element layout is list
+     *          api element template is list
      *
      * @param {object} element an instance of Element
      * @param {json} jsonContent content that receive from wordpress
      */
     function Build(element, jsonContent) {   
     	var items;
-        if (element.layout() === 'repeat') {
+        if (element.template() === 'repeat') {
             // copy the nodes
             var nodes = element.childnodes();
             var i, virtual;
-            var items = jsonContent.posts || jsonContent;
+            var items = jsonContent[element.endPoint()] || jsonContent;
+            
+            console.log(jsonContent[element.endPoint()]);
             for (i = 1; i < items.length; i+= 1) {
                 virtual = nodes.cloneNode(true);
                 element.elementNode().appendChild(virtual);
@@ -360,69 +359,42 @@
      * @param {json object} json json object that received from WordPress
      */
     function Render(element, json) {
-        var nodes, templates;
+        var nodes, properties;
         var content;
         var renderType;
 		
 		nodes = element.elementNode(); 
-    	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+    	properties = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
     	
-		if (element.layout() === 'single') {
+		if (element.template() === 'single') {
 			if (element.elementType() === 'jetpack') {
 				if (json.posts) {
-					json = json.posts[0]
+					json = json[element.endPoint()][0];
 				}
-				RenderSinglePost(json, templates);
+				RenderSinglePost(json, properties);
 			}
-		} else if (element.layout() === 'repeat') {
+		} else if (element.template() === 'repeat') {
 			RenderList(element, json);
 		}
-        
-        
-        
-/*  	
-        if (element.layout() === 'single') {
-        	// this is to check the json from jetpack api
-        	// if the to list the most recent item from a category
-        	// it will return as a collection from jectpack
-        	if (json.posts) {
-        		nodes = element.elementNode(); 
-            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
-            	RenderSinglePost(json.posts[0], templates);          	
-            } else if (json !== null && typeof json === 'object') {
-            	nodes = element.elementNode(); 
-            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
-            	RenderSinglePost(json, templates);
-            }
-        } else {
-        	if (Array.isArray(json)) {
-            	RenderList(element, json);
-        	} else if (json !== null && typeof json === 'object') {
-            	nodes = element.elementNode(); 
-            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
-            	RenderSinglePost(json, templates);
-            }
-        }
-*/
     }
 
     /**
      * RenderList
      *
      * @param {object} element instance of Element
-     * @param {json object} posts json objects that received from wordpress
+     * @param {json object} items json objects that received from wordpress
      */
-    function RenderList(element, posts) {
-        var nodes, i, templates;
+    function RenderList(element, items) {
+        var nodes, i, properties;
         // if the json with .posts is from .com
         // if the json type is array, its from .org
-        //var posts = json.posts || json;
-        for (i = 0; i < posts.length; i+= 1) {
+       
+        for (i = 0; i < items.length; i+= 1) {
             // assign the coresponse html to the post json
             nodes = element.elementNode().children[i]; 
-            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+            properties = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
             // this will insert the json to html inner html
-            RenderSinglePost(posts[i], templates);
+            RenderSinglePost(items[i], properties);
         }
     }
 
