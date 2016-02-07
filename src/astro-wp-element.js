@@ -172,7 +172,19 @@
         var sourceURL = url;
                 
         var dataset = rawElement.dataset; 
-
+		
+		
+		
+		function elementType () {
+			var elementType;
+			if (sourceURL.search(/public-api.wordpress.com/)) {
+				elementType = "jetpack";
+			} else {
+				elementType = "wpapi";
+			}
+			return elementType;
+		}
+		
         function layout  () {
             if (!dataset[ASTRO_DATASET_ATTRIBUTE.template]) {
                 return 'single';
@@ -181,7 +193,7 @@
                 return dataset[ASTRO_DATASET_ATTRIBUTE.template];
             } 
 
-                 //if layout is not defined, we assume it means render single item
+            //if layout is not defined, we assume it means render single item
         }
 
 
@@ -191,7 +203,7 @@
         }
 
         function endPoint() {
-        var type = dataset[ASTRO_DATASET_ATTRIBUTE.endpoint] || null;
+        	var type = dataset[ASTRO_DATASET_ATTRIBUTE.endpoint] || null;
             return type;
         }
         
@@ -229,7 +241,8 @@
             layout: layout,
             childnodes: childnodes,
             elementNode: parentNode,
-            templates: templates
+            templates: templates,
+            elementType: elementType
         };
     } 
 
@@ -322,18 +335,22 @@
      * @param {object} element an instance of Element
      * @param {json} jsonContent content that receive from wordpress
      */
-    function Build(element, jsonContent) {
+    function Build(element, jsonContent) {   
+    	var items;
         if (element.layout() === 'repeat') {
             // copy the nodes
             var nodes = element.childnodes();
             var i, virtual;
-            var posts = jsonContent.posts || jsonContent;
-            for (i = 1; i < posts.length; i+= 1) {
+            var items = jsonContent.posts || jsonContent;
+            for (i = 1; i < items.length; i+= 1) {
                 virtual = nodes.cloneNode(true);
                 element.elementNode().appendChild(virtual);
             }
+        } else {
+        	items = jsonContent;
         }
-        Render(element, posts);
+        
+        Render(element, items);
     }
     /**
      * Render
@@ -344,13 +361,49 @@
      */
     function Render(element, json) {
         var nodes, templates;
-        if (Array.isArray(json)) {
-            RenderList(element, json);
+        var content;
+        var renderType;
+		
+		nodes = element.elementNode(); 
+    	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+    	
+		if (element.layout() === 'single') {
+			if (element.elementType() === 'jetpack') {
+				if (json.posts) {
+					json = json.posts[0]
+				}
+				RenderSinglePost(json, templates);
+			}
+		} else if (element.layout() === 'repeat') {
+			RenderList(element, json);
+		}
+        
+        
+        
+/*  	
+        if (element.layout() === 'single') {
+        	// this is to check the json from jetpack api
+        	// if the to list the most recent item from a category
+        	// it will return as a collection from jectpack
+        	if (json.posts) {
+        		nodes = element.elementNode(); 
+            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+            	RenderSinglePost(json.posts[0], templates);          	
+            } else if (json !== null && typeof json === 'object') {
+            	nodes = element.elementNode(); 
+            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+            	RenderSinglePost(json, templates);
+            }
         } else {
-            nodes = element.elementNode(); 
-            templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
-            RenderSinglePost(json, templates);
+        	if (Array.isArray(json)) {
+            	RenderList(element, json);
+        	} else if (json !== null && typeof json === 'object') {
+            	nodes = element.elementNode(); 
+            	templates = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+            	RenderSinglePost(json, templates);
+            }
         }
+*/
     }
 
     /**
