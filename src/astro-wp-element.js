@@ -116,14 +116,14 @@
     };
 
     /**
-     * getBlogs
+     * getHosts
      *
      * @return {NodeList} return nodes that contains [data-api-host] attributes
      */
-    function getBlogs () {
-        var wpBlogs;
-        wpBlogs = document.querySelectorAll(ASTRO_QUERY_DATASET.host);
-        return wpBlogs || [];
+    function getHosts () {
+        var apiHosts;
+        apiHosts = document.querySelectorAll(ASTRO_QUERY_DATASET.host);
+        return apiHosts || [];
     } 
     
 
@@ -131,7 +131,7 @@
     /**
      * getElements
      *
-     * @param {nodeList} blogs All nodes that contains [data-api-host] attribute
+     * @param {nodeList} apiHosts All nodes that contains [data-api-host] attribute
      * @return {object} new custom object, see line 66
      */
     function getElements (apiHosts) {
@@ -252,16 +252,16 @@
     /**
      * Init
      * @summary Gather the nessesery information from the nodes
-     *          and build the object see line 66, the object will
+     *          and build the object see line 61, the object will
      *          be use in Fetch() and Build()
      *
      *
      * 
      */
     function Init() {
-        // find Blogs
-        var blogs = getBlogs();
-        var elements = getElements(blogs);
+        // find Hosts
+        var hosts = getHosts();
+        var elements = getElements(hosts);
         AstroAPI.apiElements = elements;
     }
 
@@ -269,9 +269,9 @@
     /**
      * Fetch
      * @summary A step after Init(), once it got called, it will
-     *          loop throught AstroAPI.apiElement and do the ajax call
+     *          loop throught AstroAPI.apiElements and do the ajax call
      *          for each api-element, then it will cache the json content to
-     *          AstroAPI.apiElement.jsoncontent
+     *          AstroAPI.apiElements.jsoncontent
      *
      * @param {function} callback Build the dom tree after retrive the json content from wordpress
      */
@@ -300,16 +300,13 @@
                         }
                         // sorry for the messy code                       
                         // promises is not fully compatible in every browswer
-                        // this nessed code is ugly, but...
+                        // this nested code is ugly, but...
                         // this will be rewrite soon
-                        // Todoyty
+                        // 
                         callback(e, data); // i know, this block of code smell
                         elCounter += 1;
                         if(elCounter === elAmt) {
-                              //fixmeyty
-                            // fire up event 
-                            document.dispatchEvent(event_FinishRequest);
-                            
+                            document.dispatchEvent(event_FinishRequest); 
                         }
                     });
                 })(e, apiElement);
@@ -356,11 +353,11 @@
         }
     }
 
-    /** yty
+    /**
      * RenderList
      *
      * @param {object} element instance of Element
-     * @param {json object} json json objects that received from wordpress
+     * @param {json object} posts json objects that received from wordpress
      */
     function RenderList(element, posts) {
         var nodes, i, templates;
