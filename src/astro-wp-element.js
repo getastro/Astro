@@ -160,7 +160,7 @@
      *      url The request url
      *      template What template going to build for this element
      *      childNode The child nodes
-     *		endPoint The endpoint of the request
+     *      endPoint The endpoint of the request
      *      elementNode The current element node
      *      properties The childNodes that contains [data-api-property] attribute
      * }} some public functions
@@ -170,17 +170,17 @@
         var sourceURL = url;
                 
         var dataset = rawElement.dataset; 
-		
-		function elementType () {
-			var elementType;
-			if (sourceURL.search(/public-api.wordpress.com/)) {
-				elementType = "jetpack";
-			} else {
-				elementType = "wpapi";
-			}
-			return elementType;
-		}
-		
+        
+        function elementType () {
+            var elementType;
+            if (sourceURL.search(/public-api.wordpress.com/)) {
+                elementType = "jetpack";
+            } else {
+                elementType = "wpapi";
+            }
+            return elementType;
+        }
+        
         function template  () {
             if (!dataset[ASTRO_DATASET_ATTRIBUTE.template]) {
                 return 'single';
@@ -199,7 +199,7 @@
         }
 
         function endPoint() {
-        	var type = dataset[ASTRO_DATASET_ATTRIBUTE.endpoint] || null;
+            var type = dataset[ASTRO_DATASET_ATTRIBUTE.endpoint] || null;
             return type;
         }
         
@@ -333,7 +333,7 @@
      * @param {json} jsonContent content that receive from wordpress
      */
     function Build(element, jsonContent) {   
-    	var items;
+        var items;
         if (element.template() === 'repeat') {
             // copy the nodes
             var nodes = element.childnodes();
@@ -346,7 +346,7 @@
                 element.elementNode().appendChild(virtual);
             }
         } else {
-        	items = jsonContent;
+            items = jsonContent;
         }
         
         Render(element, items);
