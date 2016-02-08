@@ -1,4 +1,4 @@
-// Astro Module - views v0.2.0
+// Astro single page app - views v0.2.0
 // Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
 // Last updated: February 7th, 2016
