@@ -5,24 +5,22 @@
         <title>Example 1</title>
 </head>
 <body>
-    <div data-wp-source="http://159.203.14.187/wp-json/wp/v2/">
-        <!--Getting a post and id = 10 -->
-        <div data-wp-element="posts/1" >
-            <h1 data-wp-template="title.rendered"></h1>
-            <div data-wp-template="content.rendered"></div>
+    <div data-api-host="http://159.203.14.187/wp-json/wp/v2/">
+        <!--Getting a post and id = 1 from self hosted WP that with WP -API plugin -->
+        <div data-api-endpoint="posts/1">
+            <h1 data-api-property="title.rendered"></h1>
+            <div data-api-property="content.rendered"></div>
         </div>
     </div>
-    <!--Fetching content from other blog ncdsbcdn.wordpress.com/-->
-    <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
-        <div data-wp-element="posts/10" >
-            <h1 data-wp-template="title"></h1>
-            <img data-wp-template="featured_image">
-            <div data-wp-template="content"></div>
-            <div data-wp-template="categories.demo.name"></div>
-            
+    <!--Getting a post and id = 10 from WP.com that with Jetpack JSON API -->
+    <div data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
+        <div data-api-endpoint="posts/10" >
+            <h1 data-api-property="title"></h1>
+            <img data-api-property="featured_image">
+            <div data-api-property="content"></div>
         </div>
     </div>
-<script src="../src/astro-wp-element.js"></script>
+<script src="../src/astroAPI.js"></script>
 
 </body>
 </html>

@@ -5,24 +5,24 @@
     <title></title>
 </head>
 <body>
-    <div data-wp-source="http://159.203.14.187">
-        <div data-wp-element="wp-json/wp/v2/posts" data-wp-layout="list">
+    <div data-api-host="http://159.203.14.187">
+        <div data-api-endpoint="wp-json/wp/v2/posts" data-api-template="repeat">
             <div>
-                <h1 data-wp-template="title.rendered"></h1>
+                <h1 data-api-property="title.rendered"></h1>
                 <!--To display featured_image will require to have Better REST API Featured Images plugin
                  https://github.com/BraadMartin/better-rest-api-featured-images -->
-                <img data-wp-template="better_featured_image.media_details.sizes.thumbnail.source_url"></img>
+                <img data-api-property="better_featured_image.media_details.sizes.thumbnail.source_url"></img>
             </div>
         </div>
     </div>
-    <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/98941271/" >
-        <div data-wp-element="posts" data-wp-options="category=demo&number=2" data-wp-layout="list">
+    <div data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/98941271/" >
+        <div data-api-endpoint="posts" data-api-parameters="category=demo&number=2" data-api-template="repeat">
             <div>
-                <h1 data-wp-template="title"></h1>
-                <img data-wp-template="featured_image"></img>
+                <h1 data-api-property="title"></h1>
+                <img data-api-property="featured_image"></img>
             </div>
         </div>
     </div>
-<script src="../src/astro-wp-element.js"></script>
+<script src="../src/astroAPI.js"></script>
 </body>
 </html>

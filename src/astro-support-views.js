@@ -1,21 +1,22 @@
-// Astro Module - views v0.1.0
-// Copyright 2015 Ting Yang and Hector Jarquin
+// Astro Module - views v0.2.0
+// Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: December 30th, 2015
+// Last updated: February 7th, 2016
 // 
-// Not support: Internet Explorer
+// Requirement: IE11+
 // 
 // Summary:
-// Turn a data-wp-element node to a single page application
+// Turn a data-api-endpoint node to a single page application
 // once the item is clicked, it will render a single view 
 //
 (function (document, window) {
     // create custom event for page state
-    var event_OnSinglePgaeView = new CustomEvent("Astro-onSingleView");
-    var event_OnListView = new CustomEvent("Astro-onListView");
+    var event_OnSinglePgaeView = new CustomEvent("Astro-OnSingleView");
+    var event_OnRepeatView = new CustomEvent("Astro-OnRepeatView");
    
     window.ASTRO_QUERY_DATASET.view = "[data-app-view]"; // set the value
     window.ASTRO_QUERY_DATASET.container = "[astro-body]";
+    window.ASTRO_DATASET_ATTRIBUTE.appView = "appView";
     
     var AstroLookUpTable = {};
     
@@ -26,14 +27,19 @@
     /**
      * BuildAstroLoopUpTable
      * @summary the object holds the hash table for the key-value pair of url and post json
-     * @param {object} AstroWP The AstroWP element
+     * @param {object} AstroAPI The AstroAPI element
      */
-    function BuildAstroLoopUpTable(AstroWP) {
-        AstroWP.wpElements.blogs.forEach(function(blog, index) {
+    function BuildAstroLoopUpTable(AstroAPI) {
+    	var articleURL;
+        AstroAPI.apiElements.forEach(function(host, index) {
             // build the hash table here!
-            for (var i = 0; i < blog.jsoncontent.length; i++) {
-                for (var j = 0; j < blog.jsoncontent[i].length; j++) {
-                    AstroLookUpTable[blog.jsoncontent[i][j].URL] = blog.jsoncontent[i][j]; 
+            for (var i = 0; i < host.jsoncontent.length; i++) {
+            	
+                for (var j = 0; j < host.jsoncontent[i].length; j++) {
+                	// if URL property existed or link
+                	// depend on the json available property
+                	articleURL = host.jsoncontent[i][j].URL || host.jsoncontent[i][j].link;
+                    AstroLookUpTable[articleURL] = host.jsoncontent[i][j]; 
                 }
             }
         });
@@ -51,12 +57,12 @@
         var mainListNodes = []; // the list wpelement nodes
         var views = []; // the views element node.
         for (var i = 0; i < viewsNode.length; i++) {
-            if (viewsNode[i].dataset.wpElement) {
+            if (viewsNode[i].dataset[window.ASTRO_DATASET_ATTRIBUTE.endpoint]) {
                 mainListNodes.push(viewsNode[i]);
             } else {
                 views.push(viewsNode[i]);
                 var temp = {
-                        name: viewsNode[i].dataset.appView,
+                        name: viewsNode[i].dataset[window.ASTRO_DATASET_ATTRIBUTE.appView],
                         viewElement: viewsNode[i],
                         list: []
                     } 
@@ -65,10 +71,9 @@
         } 
 
         // return appView object 
- 
         for (var j = 0; j < mainListNodes.length; j++) {
             appViews.forEach(function (view) {
-                if (view.name === mainListNodes[j].dataset.appView) {
+                if (view.name === mainListNodes[j].dataset[window.ASTRO_DATASET_ATTRIBUTE.appView]) {
                     view.list.push(mainListNodes[j]);
                 }
             });
@@ -87,9 +92,9 @@
         for(var i = 0; i < appViews.length; i++) {
             for (var j = 0; j < appViews[i].list.length; j++) {
                 var node = appViews[i].list[j];
-                var a = node.querySelectorAll("[data-wp-template=URL]");
+                var a = node.querySelectorAll("[astro-anchor]");
                 for (var k = 0; k < a.length; k++) {
-                    a[k].setAttribute('href', "#" + node.dataset.appView + "#" 
+                    a[k].setAttribute('href', "#" + node.dataset[window.ASTRO_DATASET_ATTRIBUTE.appView] + "#" 
                                 + a[k].getAttribute('href'));
                 }
             }
@@ -158,7 +163,7 @@
 
         bluePrint.forEach(function (view) {
             if (view.name == viewName) {
-                var templates = view.viewElement.querySelectorAll('[data-wp-template]');
+                var templates = view.viewElement.querySelectorAll(ASTRO_QUERY_DATASET.property);
                 var postJson = AstroLookUpTable[urlTemp];
                 RenderSinglePost(postJson, templates);
             }
@@ -174,37 +179,44 @@
      */
     function RenderMain(mainView) {
         mainView.style.display = "block";
-        document.dispatchEvent(event_OnListView);
+        document.dispatchEvent(event_OnRepeatView);
     }
     
-    function RenderSinglePost(json, template) {
-        var i;
-        for ( i = 0; i < template.length; i += 1) {
-            if (template[i].tagName === "IMG") {
-                template[i].setAttribute("src",
-                    json[template[i].dataset.wpTemplate]);
-            } else if (template[i].tagName === "A") {
-                template[i].setAttribute("href",
-                    json[template[i].dataset.wpTemplate]);
-            } else {
-                template[i].innerHTML = json[template[i].dataset.wpTemplate];
+    /**
+     * RenderSinglePost
+     *
+     * @param {json object} json post json object
+     * @param {nodelist} properties The nodes that contains [data-api-property]
+     */
+    function RenderSinglePost(json, properties) {
+        var i, content;
+            for ( i = 0; i < properties.length; i += 1) {
+                content = AstroAPI.Util.ExtractJsonValueByKey(properties[i].dataset[ASTRO_DATASET_ATTRIBUTE.properties], json);
+                if (properties[i].tagName === "IMG") {
+                    properties[i].setAttribute("src",
+                        content);
+                } else if (properties[i].tagName === "A") {
+                    properties[i].setAttribute("href",
+                       content);
+                } else {
+                    properties[i].innerHTML = content;
+                }
             }
-        }
     }
 
-    document.addEventListener('AstroWP-render', function (e) {
-        if (!window.AstroWP) {
+    document.addEventListener('AstroAPI-render', function (e) {
+        if (!window.AstroAPI) {
             console.error("astro-wp-element.js is not found");
             return;
         }
      
         // execute the magic
-        BuildAstroLoopUpTable(AstroWP); 
+        BuildAstroLoopUpTable(AstroAPI); 
         var bluePrint = BluePrint(document);
         InsertAnchor(bluePrint); 
         Render(bluePrint);
         // when the navigation changed 
-        window.addEventListener('popstate', function (e) {
+        window.addEventListener('hashchange', function()  {
             Render(bluePrint);
         });
     });

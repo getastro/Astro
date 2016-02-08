@@ -5,17 +5,17 @@
     <title>Example 3</title>
 </head>
 <body>
-    <div data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
+    <div data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com">
         <!-- Display the most recent post under demo category-->
         <!-- Only 1 post-->
-        <div data-wp-element="posts"  data-wp-options="category=demo&number=1" data-wp-layout="single">
+        <div data-api-endpoint="posts" data-api-parameters="category=demo&number=1" data-api-template="single">
             <div>
-                <h1 data-wp-template="title"></h1>
-                <img data-wp-template="featured_image">
-                <div data-wp-template="content"></div>
+                <h1 data-api-property="title"></h1>
+                <img data-api-property="featured_image">
+                <div data-api-property="content"></div>
             </div>
         </div>
     </div>
-<script src="../src/astro-wp-element.js"></script>
+<script src="../src/astroAPI.js"></script>
 </body>
 </html>
