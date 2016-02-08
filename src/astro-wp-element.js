@@ -302,12 +302,13 @@
                             callback(e, data);
                         }
                         if (Array.isArray(data)) {
-                            apiElement.jsoncontent.push([data]);
-                        }
-                        if (!data.posts) {
-                            apiElement.jsoncontent.push([data]);
+                            apiElement.jsoncontent.push(data);
                         } else {
-                            apiElement.jsoncontent.push(data.posts);
+                        	if (!data.posts) {
+                            	apiElement.jsoncontent.push([data]);
+                        	} else {
+                            	apiElement.jsoncontent.push(data.posts);
+                        	}
                         }
                         // sorry for the messy code                       
                         // promises is not fully compatible in every browswer

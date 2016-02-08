@@ -30,11 +30,16 @@
      * @param {object} AstroAPI The AstroAPI element
      */
     function BuildAstroLoopUpTable(AstroAPI) {
+    	var articleURL;
         AstroAPI.apiElements.forEach(function(host, index) {
             // build the hash table here!
             for (var i = 0; i < host.jsoncontent.length; i++) {
+            	
                 for (var j = 0; j < host.jsoncontent[i].length; j++) {
-                    AstroLookUpTable[host.jsoncontent[i][j].URL] = host.jsoncontent[i][j]; 
+                	// if URL property existed or link
+                	// depend on the json available property
+                	articleURL = host.jsoncontent[i][j].URL || host.jsoncontent[i][j].link;
+                    AstroLookUpTable[articleURL] = host.jsoncontent[i][j]; 
                 }
             }
         });
@@ -87,7 +92,7 @@
         for(var i = 0; i < appViews.length; i++) {
             for (var j = 0; j < appViews[i].list.length; j++) {
                 var node = appViews[i].list[j];
-                var a = node.querySelectorAll("[data-api-property=URL]");
+                var a = node.querySelectorAll("[astro-anchor]");
                 for (var k = 0; k < a.length; k++) {
                     a[k].setAttribute('href', "#" + node.dataset[window.ASTRO_DATASET_ATTRIBUTE.appView] + "#" 
                                 + a[k].getAttribute('href'));
