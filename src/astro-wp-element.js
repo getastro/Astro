@@ -45,6 +45,7 @@
         endpoint: 'apiEndpoint',
         parameters: 'apiParameters',
         template: 'apiTemplate',
+        properties: 'apiProperty',
         singlePage: 'partialView' // will be use in other
     };
     
@@ -400,20 +401,20 @@
      * RenderSinglePost
      *
      * @param {json object} json post json object
-     * @param {nodelist} template The nodes that contains [data-api-property]
+     * @param {nodelist} properties The nodes that contains [data-api-property]
      */
-    function RenderSinglePost(json, template) {
+    function RenderSinglePost(json, properties) {
         var i, content;
-            for ( i = 0; i < template.length; i += 1) {
-                content = Util.ExtractJsonValueByKey(template[i].dataset.apiProperty, json);
-                if (template[i].tagName === "IMG") {
-                    template[i].setAttribute("src",
+            for ( i = 0; i < properties.length; i += 1) {
+                content = Util.ExtractJsonValueByKey(properties[i].dataset[ASTRO_DATASET_ATTRIBUTE.properties], json);
+                if (properties[i].tagName === "IMG") {
+                    properties[i].setAttribute("src",
                         content);
-                } else if (template[i].tagName === "A") {
-                    template[i].setAttribute("href",
+                } else if (properties[i].tagName === "A") {
+                    properties[i].setAttribute("href",
                        content);
                 } else {
-                    template[i].innerHTML = content;
+                    properties[i].innerHTML = content;
                 }
             }
     }
