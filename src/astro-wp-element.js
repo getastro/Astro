@@ -339,8 +339,6 @@
             var nodes = element.childnodes();
             var i, virtual;
             var items = jsonContent[element.endPoint()] || jsonContent;
-            
-            console.log(jsonContent[element.endPoint()]);
             for (i = 1; i < items.length; i+= 1) {
                 virtual = nodes.cloneNode(true);
                 element.elementNode().appendChild(virtual);
