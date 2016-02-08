@@ -15,7 +15,7 @@
     var event_OnRepeatView = new CustomEvent("Astro-OnRepeatView");
    
     window.ASTRO_QUERY_DATASET.view = "[data-app-view]"; // set the value
-    window.ASTRO_QUERY_DATASET.container = "[astro-body]";
+    window.ASTRO_QUERY_DATASET.container = "[data-app-landing]";
     window.ASTRO_DATASET_ATTRIBUTE.appView = "appView";
     
     var AstroLookUpTable = {};
@@ -92,7 +92,7 @@
         for(var i = 0; i < appViews.length; i++) {
             for (var j = 0; j < appViews[i].list.length; j++) {
                 var node = appViews[i].list[j];
-                var a = node.querySelectorAll("[astro-anchor]");
+                var a = node.querySelectorAll("[data-app-anchor]");
                 for (var k = 0; k < a.length; k++) {
                     a[k].setAttribute('href', "#" + node.dataset[window.ASTRO_DATASET_ATTRIBUTE.appView] + "#" 
                                 + a[k].getAttribute('href'));
