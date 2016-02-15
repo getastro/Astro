@@ -18,7 +18,9 @@ Astro renders JSON in a simple way. Using only data attributes in the HTML marku
 ___
 Download the js from [version 0.3.0](https://github.com/getastro/Astro/releases/tag/0.3.0)
 
-######CDN is coming soon 
+######CDN
+https://cdn.jsdelivr.net/astro/0.3.1/astro-api.min.js
+
 #####Include it into your html
 
 Include astro file inside body tag and before any Javascript execuetion block
@@ -26,7 +28,7 @@ Include astro file inside body tag and before any Javascript execuetion block
 <!DOCTYPE html>
 <body>
 
-<script src="../dist/astro-api.min.js"></script>
+<script src="https://cdn.jsdelivr.net/astro/0.3.1/astro-api.min.js"></script>
 </body>
 </html>
 ```
