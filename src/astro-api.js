@@ -1,7 +1,7 @@
-// Astro Framework - WordPress v0.3.0
+// Astro Framework - WordPress v0.3.1
 // Copyright 2016 Ting Yang and Hector Jarquin
 // Released under the MIT license
-// Last updated: Feburary 7th, 2016 
+// Last updated: Feburary 15th, 2016 
 //
 // Support:
 //  WordPress.com, the official RESTful api endpoint
@@ -304,11 +304,11 @@
                         if (Array.isArray(data)) {
                             apiElement.jsoncontent.push(data);
                         } else {
-                        	if (!data.posts) {
-                            	apiElement.jsoncontent.push([data]);
-                        	} else {
-                            	apiElement.jsoncontent.push(data.posts);
-                        	}
+                            if (!data.posts) {
+                                apiElement.jsoncontent.push([data]);
+                            } else {
+                                apiElement.jsoncontent.push(data.posts);
+                            }
                         }
                         // sorry for the messy code                       
                         // promises is not fully compatible in every browswer
@@ -362,20 +362,20 @@
         var nodes, properties;
         var content;
         var renderType;
-		
-		nodes = element.elementNode(); 
-    	properties = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
-    	
-		if (element.template() === 'single') {
-			if (element.elementType() === 'jetpack') {
-				if (json.posts) {
-					json = json[element.endPoint()][0];
-				}
-				RenderSinglePost(json, properties);
-			}
-		} else if (element.template() === 'repeat') {
-			RenderList(element, json);
-		}
+        
+        nodes = element.elementNode(); 
+        properties = nodes.querySelectorAll(ASTRO_QUERY_DATASET.property);
+        
+        if (element.template() === 'single') {
+            if (element.elementType() === 'jetpack') {
+                if (json.posts) {
+                    json = json[element.endPoint()][0];
+                }
+                RenderSinglePost(json, properties);
+            }
+        } else if (element.template() === 'repeat') {
+            RenderList(element, json);
+        }
     }
 
     /**
