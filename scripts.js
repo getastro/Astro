@@ -1,6 +1,6 @@
 (function (document, window) {
 	
-	document.addEventListener('AstroWP-render', function (e) {
+	document.addEventListener('AstroAPI-render', function (e) {
 		
 		$(window).ready(function() {
 			$('body').fadeIn(500);
