@@ -33,7 +33,7 @@
       </div>
 	  </div>
     </nav>
-	<div Astro-body>
+	<div data-app-landing>
 		<div class="jumbotron cover text-center" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
 		  <div class="container" data-api-endpoint="posts/51">
 			<div data-api-property="content"></div>
@@ -44,7 +44,7 @@
 			<div class="col-md-12" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
 				<ul class="bxslider" data-api-endpoint="posts" data-api-parameters="category=instagram-likes&number=25" data-api-template="repeat" data-app-view="singlepage">
 					<li style="overflow:hidden">
-						<a data-api-property="URL">
+						<a data-app-anchor data-api-property="URL">
 						<img class="img-thumbnail pull-left" style="margin-right:2%;" data-api-property="featured_image"></img> 
 						<h4 data-api-property="title"></h4>
 						</a>
