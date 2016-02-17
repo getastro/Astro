@@ -34,19 +34,19 @@
 	  </div>
     </nav>
 	<div Astro-body>
-		<div class="jumbotron cover text-center" data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
-		  <div class="container" data-wp-element="posts/51">
-			<div data-wp-template="content"></div>
+		<div class="jumbotron cover text-center" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
+		  <div class="container" data-api-endpoint="posts/51">
+			<div data-api-property="content"></div>
 		  </div>
 		</div>
 
 		<div class="row">
-			<div class="col-md-12" data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
-				<ul class="bxslider" data-wp-element="posts" data-wp-options="category=instagram-likes&number=25" data-wp-layout="list" data-app-view="singlepage">
+			<div class="col-md-12" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/getcontentfrom.wordpress.com/">
+				<ul class="bxslider" data-api-endpoint="posts" data-api-parameters="category=instagram-likes&number=25" data-api-template="repeat" data-app-view="singlepage">
 					<li style="overflow:hidden">
-						<a data-wp-template="URL">
-						<img class="img-thumbnail pull-left" style="margin-right:2%;" data-wp-template="featured_image"></img> 
-						<h4 data-wp-template="title"></h4>
+						<a data-api-property="URL">
+						<img class="img-thumbnail pull-left" style="margin-right:2%;" data-api-property="featured_image"></img> 
+						<h4 data-api-property="title"></h4>
 						</a>
 					</li>
 				</ul>
@@ -55,38 +55,38 @@
 		
 		<div class="container">
 			<div class="row">
-				<div class="col-md-4" data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/dailypost.wordpress.com/">
+				<div class="col-md-4" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/dailypost.wordpress.com/">
 					<h3 class="page-header">The Daily Post <small>Design & Layout</small></h3>
-					<div data-wp-element="posts" data-wp-options="category=layout-design&number=5" data-wp-layout="list">
+					<div data-api-endpoint"posts" data-api-parameters="category=layout-design&number=5" data-api-template="repeat">
 						<div class="clearfix" style="border-bottom:1px solid #eee;padding: 10px 0;">
-							<a data-wp-template="URL">
-							<img class="img-thumbnail pull-left" style="margin-right: 2%;" data-wp-template="featured_image"></img> 
-							<h4 data-wp-template="title"></h4>
+							<a data-api-property="URL">
+							<img class="img-thumbnail pull-left" style="margin-right: 2%;" data-api-property="featured_image"></img> 
+							<h4 data-api-property="title"></h4>
 							</a>
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-4" data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/jetpack.me/">
+				<div class="col-md-4" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/jetpack.me/">
 				  <h3 class="page-header">Jetpack <small>Features</small></h3>
-					<div class="media" data-wp-element="posts"data-wp-options="category=features&number=2" data-wp-layout="list" data-app-view="singlepage">
+					<div class="media" data-api-endpoint="posts" data-api-parameters="category=features&number=2" data-api-template="repeat" data-app-view="singlepage">
 						<div class="clearfix" style="border-bottom:1px solid #eee;padding: 10px 0;">
-							<a data-wp-template="URL">
-								<h4 class="media-heading" data-wp-template="title"></h4>
-								<p data-wp-template="excerpt"></p>
+							<a ddata-api-property="URL">
+								<h4 class="media-heading" data-api-property="title"></h4>
+								<p data-api-property="excerpt"></p>
 							</a>
 						</div>
 					</div>
 				</div>
 				
-				<div class="col-md-4" data-wp-source="https://public-api.wordpress.com/rest/v1.1/sites/wordpress.tv/">
+				<div class="col-md-4" data-api-host="https://public-api.wordpress.com/rest/v1.1/sites/wordpress.tv/">
 					<h3 class="page-header">WordPress.TV <small>Latest</small></h3>
-					<div class="media" data-wp-element="posts"data-wp-options="number=1" data-wp-layout="list" >
+					<div class="media" data-api-endpoint="posts" data-api-parameters="number=1" data-api-template="repeat" >
 						<div>
-							<a data-wp-template="URL"><h4 data-wp-template="title"></h4></a>
-							<div data-wp-template="content" style="overflow:hidden;"></div>
+							<a data-api-property="URL"><h4 data-api-property="title"></h4></a>
+							<div data-api-property="content" style="overflow:hidden;"></div>
 							<hr />
-							<div data-wp-template="excerpt"></div>
+							<div data-api-property="excerpt"></div>
 						</div>
 					</div>
 				</div>
@@ -99,8 +99,8 @@
 			<div class="col-md-2">			  
 			</div>
 			<div class="col-md-12">
-				<h1 data-wp-template="title"></h1>
-				<div data-wp-template="content"></div>
+				<h1 data-api-property="title"></h1>
+				<div data-api-property="content"></div>
 			</div> 
 			<div class="col-md-2">			  
 			</div>
