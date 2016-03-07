@@ -16,7 +16,7 @@ Astro renders JSON in a simple way. Using only data attributes in the HTML marku
 
 ###Getting Started
 ___
-Download the js from [version 0.3.0](https://github.com/getastro/Astro/releases/tag/0.3.0)
+Download the js from [version 0.3.1](https://github.com/getastro/Astro/releases/tag/0.3.1)
 
 ######CDN
 https://cdn.jsdelivr.net/astro/0.3.1/astro-api.min.js
